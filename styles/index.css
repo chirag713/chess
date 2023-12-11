@@ -1,0 +1,35 @@
+body{
+    background-color: #517244;
+}
+
+#root{
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    margin: auto;
+}
+
+.Squarerow{
+    
+    /* background-color: red; */
+    display: flex;
+
+}
+
+.white{
+    background-color:#C6A26A ;
+}
+
+.black{
+    background-color: #8C623E;
+}
+
+.square{
+    width: 75px;
+    height: 75px;
+}
+
+.piece{
+    width: 100%;
+    cursor: grab;
+}
