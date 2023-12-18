@@ -1,5 +1,17 @@
+import { renderhighlight } from "../render/main.js";
+
+
+
 function Square(color ,id ,piece){
+
+    
+
+    const deHighlight = function(){
+
+    }
+
     return {
+
         color ,id ,piece
     };
 }
