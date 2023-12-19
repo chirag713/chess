@@ -48,13 +48,10 @@ function moveelemet(piece, id) {
     flatdata.forEach(el => {
         if (el.id === piece.current_position) {
             delete el.piece;
-
         }
         if (el.id === id) {
             el.piece = piece;
         }
-
-
     });
     clearHighlight();
     const previouspiece = document.getElementById(piece.current_position);
@@ -63,7 +60,6 @@ function moveelemet(piece, id) {
     previouspiece.innerHTML = "";
     previouspiece.classList.remove("highlightYellow");
     piece.current_position = id;
-
 }
 
 
@@ -71,7 +67,7 @@ function moveelemet(piece, id) {
 function clearpreviousselfhighlight(piece) {
 
     if (piece) {
-        // console.log(piece.current_position);
+    
         document.getElementById(piece.current_position).classList.remove("highlightYellow");
     }
 }
