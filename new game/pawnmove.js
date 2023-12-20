@@ -7,21 +7,152 @@ let movestate = null;
 
 let checkwhiteorblack = 1;
 
-
-let blackkingpos = "e8";
-let whitekingpos = "e1";
+var greenhighlight = null;
 
 
-function clearcheck() {
-    var xyz = document.getElementById(blackkingpos);
+var blackkingpos = "e8";
+var whitekingpos = "e1";
 
-    if (xyz.classList.contains("check")) {
-        xyz.classList.remove("check");
+
+function whiteking({ piece }) {
+
+    const isred = document.getElementById(piece.current_position);
+    if (isred.classList.contains("capturecolor")) {
+        removered();
+        cleardot();
+        if (highlight_state) {
+            clearboard(highlight_state);
+        }
+        return;
     }
-    xyz = document.getElementById(whitekingpos);
+    removered();
 
-    if (xyz.classList.contains("check")) {
-        xyz.classList.remove("check");
+    if (piece == highlight_state) {
+        cleardot();
+        clearboard(piece);
+        removered();
+        highlight_state = null;
+        return;
+    }
+    const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
+    const current_pos = piece.current_position;
+    const currentrow = current_pos[1] - 1;
+    const currentcol = current_pos[0].charCodeAt(0) - 97;
+    console.log(currentcol, currentrow);
+    const requirecol = [currentcol - 1, currentcol - 1, currentcol - 1, currentcol, currentcol, currentcol + 1, currentcol + 1, currentcol + 1];
+    const requirerow = [currentrow + 1, currentrow, currentrow - 1, currentrow + 1, currentrow - 1, currentrow + 1, currentrow, currentrow - 1];
+    const hightlight_squareid = [];
+    const capture_square = [];
+    for (var i = 0; i < 8; i++) {
+        if (requirecol[i] < 8 && requirerow[i] < 8 && requirecol[i] >= 0 && requirerow[i] >= 0) {
+            var mn = col[requirecol[i]] + row[requirerow[i]];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+            }
+            else {
+                hightlight_squareid.push(mn);
+            }
+        }
+    }
+    cleardot();
+    movestate = piece;
+    highlight_state = piece;
+    highlight(piece);
+    let highlight_captureid = [];
+
+    capture_square.forEach(element => {
+        if (checkpiece(element, "White")) {
+            highlight_captureid.push(element);
+        }
+    });
+
+    dots(hightlight_squareid);
+
+    hightlight_squareid.forEach(highlight => {
+        globalstate.forEach(row => {
+            row.forEach(element => {
+                if (element.id == highlight) {
+                    element.highlight = true;
+                }
+            });
+        });
+    });
+
+}
+
+function blackking({ piece }) {
+
+    const isred = document.getElementById(piece.current_position);
+    if (isred.classList.contains("capturecolor")) {
+        removered();
+        cleardot();
+        if (highlight_state) {
+            clearboard(highlight_state);
+        }
+        return;
+    }
+    removered();
+
+    if (piece == highlight_state) {
+        cleardot();
+        clearboard(piece);
+        removered();
+        highlight_state = null;
+        return;
+    }
+    const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
+    const current_pos = piece.current_position;
+    const currentrow = current_pos[1] - 1;
+    const currentcol = current_pos[0].charCodeAt(0) - 97;
+    console.log(currentcol, currentrow);
+    const requirecol = [currentcol - 1, currentcol - 1, currentcol - 1, currentcol, currentcol, currentcol + 1, currentcol + 1, currentcol + 1];
+    const requirerow = [currentrow + 1, currentrow, currentrow - 1, currentrow + 1, currentrow - 1, currentrow + 1, currentrow, currentrow - 1];
+    const hightlight_squareid = [];
+    const capture_square = [];
+    for (var i = 0; i < 8; i++) {
+        if (requirecol[i] < 8 && requirerow[i] < 8 && requirecol[i] >= 0 && requirerow[i] >= 0) {
+            var mn = col[requirecol[i]] + row[requirerow[i]];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+            }
+            else {
+                hightlight_squareid.push(mn);
+            }
+        }
+    }
+    cleardot();
+    movestate = piece;
+    highlight_state = piece;
+    highlight(piece);
+    let highlight_captureid = [];
+
+    capture_square.forEach(element => {
+        if (checkpiece(element, "Black")) {
+            highlight_captureid.push(element);
+        }
+    });
+
+    dots(hightlight_squareid);
+
+    hightlight_squareid.forEach(highlight => {
+        globalstate.forEach(row => {
+            row.forEach(element => {
+                if (element.id == highlight) {
+                    element.highlight = true;
+                }
+            });
+        });
+    });
+
+}
+
+
+function clearcheck(piece) {
+    if (piece) {
+        document.getElementById(piece).classList.remove("check");
+        greenhighlight = null;
     }
 }
 
@@ -32,11 +163,13 @@ function check(piece) {
         const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) + 1}`;
         if (blackkingpos === col1) {
             document.getElementById(blackkingpos).classList.add("check");
+            greenhighlight = blackkingpos;
         }
         else {
             const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) + 1}`;
             if (blackkingpos === col2) {
                 document.getElementById(blackkingpos).classList.add("check");
+                greenhighlight = blackkingpos;
             }
         }
     }
@@ -44,12 +177,15 @@ function check(piece) {
         const current_pos = piece.current_position;
         const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) - 1}`;
         if (whitekingpos === col1) {
-            document.getElementById(blackkingpos).classList.add("check");
+            document.getElementById(whitekingpos).classList.add("check");
+            greenhighlight = whitekingpos;
+
         }
         else {
             const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) - 1}`;
             if (whitekingpos === col2) {
-                document.getElementById(blackkingpos).classList.add("check");
+                document.getElementById(whitekingpos).classList.add("check");
+                greenhighlight = whitekingpos;
             }
         }
     }
@@ -106,6 +242,7 @@ function check(piece) {
         capture_square.forEach(element => {
             if (element === whitekingpos) {
                 document.getElementById(whitekingpos).classList.add("check");
+                greenhighlight = whitekingpos;
             }
         });
 
@@ -163,6 +300,7 @@ function check(piece) {
         capture_square.forEach(element => {
             if (element === blackkingpos) {
                 document.getElementById(blackkingpos).classList.add("check");
+                greenhighlight = blackkingpos;
             }
         });
     }
@@ -209,6 +347,7 @@ function check(piece) {
         capture_square.forEach(element => {
             if (element === blackkingpos) {
                 document.getElementById(blackkingpos).classList.add("check");
+                greenhighlight = blackkingpos;
             }
         });
     }
@@ -255,6 +394,7 @@ function check(piece) {
         capture_square.forEach(element => {
             if (element === whitekingpos) {
                 document.getElementById(whitekingpos).classList.add("check");
+                greenhighlight = whitekingpos;
             }
         });
     }
@@ -345,6 +485,7 @@ function check(piece) {
         capture_square.forEach(element => {
             if (element === blackkingpos) {
                 document.getElementById(blackkingpos).classList.add("check");
+                greenhighlight = blackkingpos;
             }
         });
     }
@@ -435,6 +576,7 @@ function check(piece) {
         capture_square.forEach(element => {
             if (element === whitekingpos) {
                 document.getElementById(whitekingpos).classList.add("check");
+                greenhighlight = whitekingpos;
             }
         });
     }
@@ -464,6 +606,7 @@ function check(piece) {
         capture_square.forEach(element => {
             if (element === whitekingpos) {
                 document.getElementById(whitekingpos).classList.add("check");
+                greenhighlight = whitekingpos;
             }
         });
 
@@ -494,6 +637,7 @@ function check(piece) {
         capture_square.forEach(element => {
             if (element === blackkingpos) {
                 document.getElementById(blackkingpos).classList.add("check");
+                greenhighlight = whitekingpos;
             }
         });
 
@@ -1477,8 +1621,12 @@ function attackpawn(piece, id) {
 
 }
 function movepawn(piece, id) {
-    checkwhiteorblack=(checkwhiteorblack+1)%2;
-    clearcheck();
+    if (piece.current_position === blackkingpos)
+        blackkingpos = id;
+    if (piece.current_position === whitekingpos)
+        whitekingpos = id;
+    checkwhiteorblack = (checkwhiteorblack + 1) % 2;
+    clearcheck(greenhighlight);
     const flatdata = globalstate.flat();
     flatdata.forEach(el => {
         if (el.id === piece.current_position) {
@@ -1705,45 +1853,49 @@ function blackpawnclick({ piece }) {
 function agrawal() {
     document.getElementById("root").addEventListener("click", function (event) {
         if (event.target.localName === "img") {
-
             const clickedid = event.target.parentNode.id;
             const flatarr = globalstate.flat();
             const square = (flatarr.find(el => el.id === clickedid));
-            if (checkwhiteorblack == 1) {
-                if (square.piece.piece_name === "White_pawn") {
-                    whitepawnclick(square);
-                }
-                else if (square.piece.piece_name === "White_rook") {
-                    whiterook(square);
-                }
-                else if (square.piece.piece_name === "White_bishop") {
-                    whitebishop(square);
-                }
-                else if (square.piece.piece_name === "White_queen") {
-                    whitequeen(square);
-                }
-                else if (square.piece.piece_name === "White_knight") {
-                    whiteknight(square);
-                }
-            }
-            else {
-                if (square.piece.piece_name === "Black_queen") {
-                    blackqueen(square);
-                }
-                else if (square.piece.piece_name === "Black_rook") {
-                    blackrook(square);
-                }
-                else if (square.piece.piece_name === "Black_knight") {
-                    blackknight(square);
-                }
-                else if (square.piece.piece_name === "Black_bishop") {
-                    blackbishop(square);
-                }
-                else if (square.piece.piece_name === "Black_pawn") {
-                    blackpawnclick(square);
-                }
 
+            if (square.piece.piece_name === "White_pawn") {
+                whitepawnclick(square);
             }
+            else if (square.piece.piece_name === "White_king") {
+                whiteking(square);
+            }
+            else if (square.piece.piece_name === "White_rook") {
+                whiterook(square);
+            }
+            else if (square.piece.piece_name === "White_bishop") {
+                whitebishop(square);
+            }
+            else if (square.piece.piece_name === "White_queen") {
+                whitequeen(square);
+            }
+            else if (square.piece.piece_name === "White_knight") {
+                whiteknight(square);
+            }
+
+            if (square.piece.piece_name === "Black_queen") {
+                blackqueen(square);
+            }
+            else if (square.piece.piece_name === "Black_rook") {
+                blackrook(square);
+            }
+            else if (square.piece.piece_name === "Black_knight") {
+                blackknight(square);
+            }
+            else if (square.piece.piece_name === "Black_bishop") {
+                blackbishop(square);
+            }
+            else if (square.piece.piece_name === "Black_pawn") {
+                blackpawnclick(square);
+            }
+            else if (square.piece.piece_name === "Black_king") {
+                blackking(square);
+            }
+
+
 
 
         }
