@@ -6,9 +6,20 @@ let highlight_state = null;
 let movestate = null;
 
 
+function blackknight({ piece }) {
 
 
-function blackrook({piece}){
+    const isred = document.getElementById(piece.current_position);
+    if (isred.classList.contains("capturecolor")) {
+        removered();
+        cleardot();
+        if (highlight_state) {
+            clearboard(highlight_state);
+        }
+        return;
+    }
+    removered();
+
 
 
 
@@ -20,42 +31,46 @@ function blackrook({piece}){
         return;
     }
 
-    cleardot();
 
 
-    movestate = piece;
-    highlight_state=piece;
+    const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
+    const current_pos = piece.current_position;
+    const currentrow = current_pos[1] - 1;
+    const currentcol = current_pos[0].charCodeAt(0) - 97;
+    var requirecol = [currentcol + 2, currentcol + 2, currentcol + 1, currentcol + 1, currentcol - 1, currentcol - 1, currentcol - 2, currentcol - 2];
+    var requirerow = [currentrow + 1, currentrow - 1, currentrow + 2, currentrow - 2, currentrow + 2, currentrow - 2, currentrow - 1, currentrow + 1];
 
-
-    highlight(piece);
 
     const hightlight_squareid = [];
-    const current_pos = piece.current_position;
-    for(var i=current_pos[1]+1;i<=8;i++){
-        const x=`${current_pos[0]+i}`;
-        hightlight_squareid.push(x);
-    }
-    for(var i=current_pos[1]-1;i>0;i--){
-        const x=`${current_pos[0]+i}`;
-        hightlight_squareid.push(x);
-    }
+    const capture_square = [];
+    for (var i = 0; i < 8; i++) {
+        if (requirecol[i] < 8 && requirerow[i] < 8 && requirecol[i] >= 0 && requirerow[i] >= 0) {
+            var mn = col[requirecol[i]] + row[requirerow[i]];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+            }
+            else {
+                hightlight_squareid.push(mn);
+            }
+        }
 
-    const currectone=current_pos[0].charCodeAt(0);
-
-
-    for(var i=currectone+1;i<=104;i++){
-        var x=`${String.fromCharCode(i)}${current_pos[1]}`;
-        hightlight_squareid.push(x);
-    }
-    for(var i=currectone-1;i>=97;i--){
-        var x=`${String.fromCharCode(i)}${current_pos[1]}`;
-        hightlight_squareid.push(x);
     }
 
+    cleardot();
+    movestate = piece;
+    highlight_state = piece;
+    highlight(piece);
+    let highlight_captureid = [];
+
+    capture_square.forEach(element => {
+        if (checkpiece(element, "Black")) {
+            highlight_captureid.push(element);
+        }
+    });
 
     dots(hightlight_squareid);
 
-    
     hightlight_squareid.forEach(highlight => {
         globalstate.forEach(row => {
             row.forEach(element => {
@@ -65,13 +80,103 @@ function blackrook({piece}){
             });
         });
     });
-    
+
+}
+
+function whiteknight({ piece }) {
+
+
+    const isred = document.getElementById(piece.current_position);
+    if (isred.classList.contains("capturecolor")) {
+        removered();
+        cleardot();
+        if (highlight_state) {
+            clearboard(highlight_state);
+        }
+        return;
+    }
+    removered();
+
+
+
+
+    if (piece == highlight_state) {
+        cleardot();
+        clearboard(piece);
+        removered();
+        highlight_state = null;
+        return;
+    }
+
+
+
+    const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
+    const current_pos = piece.current_position;
+    const currentrow = current_pos[1] - 1;
+    const currentcol = current_pos[0].charCodeAt(0) - 97;
   
-    
+    var requirecol = [currentcol + 2, currentcol + 2, currentcol + 1, currentcol + 1, currentcol - 1, currentcol - 1, currentcol - 2, currentcol - 2];
+    var requirerow = [currentrow + 1, currentrow - 1, currentrow + 2, currentrow - 2, currentrow + 2, currentrow - 2, currentrow - 1, currentrow + 1];
+
+
+    const hightlight_squareid = [];
+    const capture_square = [];
+    for (var i = 0; i < 8; i++) {
+        if (requirecol[i] < 8 && requirerow[i] < 8 && requirecol[i] >= 0 && requirerow[i] >= 0) {
+            var mn = col[requirecol[i]] + row[requirerow[i]];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+            }
+            else {
+                hightlight_squareid.push(mn);
+            }
+        }
+
+    }
+
+    cleardot();
+    movestate = piece;
+    highlight_state = piece;
+    highlight(piece);
+    let highlight_captureid = [];
+
+    capture_square.forEach(element => {
+        if (checkpiece(element, "White")) {
+            highlight_captureid.push(element);
+        }
+    });
+
+    dots(hightlight_squareid);
+
+    hightlight_squareid.forEach(highlight => {
+        globalstate.forEach(row => {
+            row.forEach(element => {
+                if (element.id == highlight) {
+                    element.highlight = true;
+                }
+            });
+        });
+    });
 
 }
 
-function whiterook({piece}){
+
+function whitequeen({ piece }) {
+    cleardot();
+
+
+    const isred = document.getElementById(piece.current_position);
+    if (isred.classList.contains("capturecolor")) {
+        removered();
+        cleardot();
+        if (highlight_state) {
+            clearboard(highlight_state);
+        }
+        return;
+    }
+    removered();
+
 
 
 
@@ -83,46 +188,528 @@ function whiterook({piece}){
         return;
     }
 
-    cleardot();
-
-    highlight(piece);
-    movestate = piece;
-    highlight_state=piece;
-
-
-   
-
-
-    const hightlight_squareid = [];
+    const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
     const current_pos = piece.current_position;
-    console.log(current_pos[1]);
 
-    for(var i=current_pos[1]+1;i<=8;i++){
-        console.log(i);
+    const currenttwo = current_pos[1] - 1;
+    const currectone = current_pos[0].charCodeAt(0) - 97;
+    const currentrow = current_pos[1] - 1;
+    const currentcol = current_pos[0].charCodeAt(0) - 97;
+    const hightlight_squareid = [];
+    const capture_square = [];
+    var i = currentcol + 1, j = currentrow + 1;
+
+    for (; i <= 7 && j <= 7;) {
+        const mn = col[i] + row[j];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+        i++;
+        j++;
+    }
+    i = currentcol - 1;
+    j = currentrow + 1;
+    for (; j <= 7 && i >= 0;) {
+        const mn = col[i] + row[j];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+        j++;
+        i--;
+    }
+    i = currentcol + 1;
+    j = currentrow - 1;
+    for (; i <= 7 && j >= 0;) {
+        const mn = col[i] + row[j];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+        i++;
+        j--;
+    }
+    i = currentcol - 1;
+    j = currentrow - 1;
+    for (; j >= 0 && i >= 0;) {
+        const mn = col[i] + row[j];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+        j--;
+        i--;
+    }
+    for (var i = currenttwo - 1; i >= 0; i--) {
+        const mn = col[currectone] + row[i];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+    }
+    for (var i = (currenttwo + 1); i <= 7; i++) {
+        const mn = col[currectone] + row[i];
+
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
     }
 
-    for(var i=current_pos[1]-1;i>0;i--){
-        // const x=`${current_pos[0]}${i}`;
-        // hightlight_squareid.push(x);
-        console.log(i);
+    for (var i = currectone + 1; i <= 7; i++) {
+        const mn = col[i] + row[currenttwo];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+
+    }
+    for (var i = currectone - 1; i >= 0; i--) {
+        const mn = col[i] + row[currenttwo];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
     }
 
 
-    const currectone=current_pos[0].charCodeAt(0);
-    for(var i=currectone+1;i<=104;i++){
-        var x=`${String.fromCharCode(i)}${current_pos[1]}`;
-        hightlight_squareid.push(x);
-    }
+    cleardot();
+    movestate = piece;
+    highlight_state = piece;
+    highlight(piece);
+    let highlight_captureid = [];
 
-    for(var i=currectone-1;i>=97;i--){
-        var x=`${String.fromCharCode(i)}${current_pos[1]}`;
-        hightlight_squareid.push(x);
-    }
-
+    capture_square.forEach(element => {
+        if (checkpiece(element, "White")) {
+            highlight_captureid.push(element);
+        }
+    });
 
     dots(hightlight_squareid);
 
-    
+    hightlight_squareid.forEach(highlight => {
+        globalstate.forEach(row => {
+            row.forEach(element => {
+                if (element.id == highlight) {
+                    element.highlight = true;
+                }
+            });
+        });
+    });
+
+}
+
+function blackqueen({ piece }) {
+    cleardot();
+
+
+    const isred = document.getElementById(piece.current_position);
+    if (isred.classList.contains("capturecolor")) {
+        removered();
+        cleardot();
+        if (highlight_state) {
+            clearboard(highlight_state);
+        }
+        return;
+    }
+    removered();
+
+
+
+
+    if (piece == highlight_state) {
+        cleardot();
+        clearboard(piece);
+        removered();
+        highlight_state = null;
+        return;
+    }
+    const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
+    const current_pos = piece.current_position;
+
+    const currenttwo = current_pos[1] - 1;
+    const currectone = current_pos[0].charCodeAt(0) - 97;
+    const currentrow = current_pos[1] - 1;
+    const currentcol = current_pos[0].charCodeAt(0) - 97;
+    const hightlight_squareid = [];
+    const capture_square = [];
+    var i = currentcol + 1, j = currentrow + 1;
+
+    for (; i <= 7 && j <= 7;) {
+        const mn = col[i] + row[j];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+        i++;
+        j++;
+    }
+    i = currentcol - 1;
+    j = currentrow + 1;
+    for (; j <= 7 && i >= 0;) {
+        const mn = col[i] + row[j];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+        j++;
+        i--;
+    }
+    i = currentcol + 1;
+    j = currentrow - 1;
+    for (; i <= 7 && j >= 0;) {
+        const mn = col[i] + row[j];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+        i++;
+        j--;
+    }
+    i = currentcol - 1;
+    j = currentrow - 1;
+    for (; j >= 0 && i >= 0;) {
+        const mn = col[i] + row[j];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+        j--;
+        i--;
+    }
+    for (var i = currenttwo - 1; i >= 0; i--) {
+        const mn = col[currectone] + row[i];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+    }
+    for (var i = (currenttwo + 1); i <= 7; i++) {
+        const mn = col[currectone] + row[i];
+
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+    }
+
+    for (var i = currectone + 1; i <= 7; i++) {
+        const mn = col[i] + row[currenttwo];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+
+    }
+    for (var i = currectone - 1; i >= 0; i--) {
+        const mn = col[i] + row[currenttwo];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+    }
+
+
+    cleardot();
+    movestate = piece;
+    highlight_state = piece;
+    highlight(piece);
+    let highlight_captureid = [];
+
+    capture_square.forEach(element => {
+        if (checkpiece(element, "Black")) {
+            highlight_captureid.push(element);
+        }
+    });
+
+    dots(hightlight_squareid);
+
+    hightlight_squareid.forEach(highlight => {
+        globalstate.forEach(row => {
+            row.forEach(element => {
+                if (element.id == highlight) {
+                    element.highlight = true;
+                }
+            });
+        });
+    });
+
+}
+
+function whitebishop({ piece }) {
+    cleardot();
+
+
+    const isred = document.getElementById(piece.current_position);
+    if (isred.classList.contains("capturecolor")) {
+        removered();
+        cleardot();
+        if (highlight_state) {
+            clearboard(highlight_state);
+        }
+        return;
+    }
+    removered();
+
+
+
+
+    if (piece == highlight_state) {
+        cleardot();
+        clearboard(piece);
+        removered();
+        highlight_state = null;
+        return;
+    }
+    const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
+    const current_pos = piece.current_position;
+    const currentrow = current_pos[1] - 1;
+    const currentcol = current_pos[0].charCodeAt(0) - 97;
+    const hightlight_squareid = [];
+    const capture_square = [];
+    var i = currentcol + 1, j = currentrow + 1;
+    for (; i <= 7 && j <= 7;) {
+        const mn = col[i] + row[j];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+        i++;
+        j++;
+    }
+    i = currentcol - 1;
+    j = currentrow + 1;
+    for (; j <= 7 && i >= 0;) {
+        const mn = col[i] + row[j];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+        j++;
+        i--;
+    }
+    i = currentcol + 1;
+    j = currentrow - 1;
+    for (; i <= 7 && j >= 0;) {
+        const mn = col[i] + row[j];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+        i++;
+        j--;
+    }
+    i = currentcol - 1;
+    j = currentrow - 1;
+    for (; j >= 0 && i >= 0;) {
+        const mn = col[i] + row[j];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+        j--;
+        i--;
+    }
+
+    cleardot();
+    movestate = piece;
+    highlight_state = piece;
+    highlight(piece);
+    let highlight_captureid = [];
+
+    capture_square.forEach(element => {
+        if (checkpiece(element, "White")) {
+            highlight_captureid.push(element);
+        }
+    });
+
+    dots(hightlight_squareid);
+
+    hightlight_squareid.forEach(highlight => {
+        globalstate.forEach(row => {
+            row.forEach(element => {
+                if (element.id == highlight) {
+                    element.highlight = true;
+                }
+            });
+        });
+    });
+
+
+
+
+
+
+
+
+}
+
+function blackbishop({ piece }) {
+    cleardot();
+
+
+    const isred = document.getElementById(piece.current_position);
+    if (isred.classList.contains("capturecolor")) {
+        removered();
+        cleardot();
+        if (highlight_state) {
+            clearboard(highlight_state);
+        }
+        return;
+    }
+    removered();
+
+
+
+
+    if (piece == highlight_state) {
+        cleardot();
+        clearboard(piece);
+        removered();
+        highlight_state = null;
+        return;
+    }
+    const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
+    const current_pos = piece.current_position;
+    const currentrow = current_pos[1] - 1;
+    const currentcol = current_pos[0].charCodeAt(0) - 97;
+    const hightlight_squareid = [];
+    const capture_square = [];
+    var i = currentcol + 1, j = currentrow + 1;
+    for (; i <= 7 && j <= 7;) {
+        const mn = col[i] + row[j];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+        i++;
+        j++;
+    }
+    i = currentcol - 1;
+    j = currentrow + 1;
+    for (; j <= 7 && i >= 0;) {
+        const mn = col[i] + row[j];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+        j++;
+        i--;
+    }
+    i = currentcol + 1;
+    j = currentrow - 1;
+    for (; i <= 7 && j >= 0;) {
+        const mn = col[i] + row[j];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+        i++;
+        j--;
+    }
+    i = currentcol - 1;
+    j = currentrow - 1;
+    for (; j >= 0 && i >= 0;) {
+        const mn = col[i] + row[j];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+        j--;
+        i--;
+    }
+
+    cleardot();
+    movestate = piece;
+    highlight_state = piece;
+    highlight(piece);
+    let highlight_captureid = [];
+
+    capture_square.forEach(element => {
+        if (checkpiece(element, "Black")) {
+            highlight_captureid.push(element);
+        }
+    });
+
+    dots(hightlight_squareid);
+
     hightlight_squareid.forEach(highlight => {
         globalstate.forEach(row => {
             row.forEach(element => {
@@ -135,29 +722,222 @@ function whiterook({piece}){
 }
 
 
+function blackrook({ piece }) {
+    cleardot();
+    const isred = document.getElementById(piece.current_position);
+    if (isred.classList.contains("capturecolor")) {
+        removered();
+        cleardot();
+        if (highlight_state) {
+            clearboard(highlight_state);
+        }
+        return;
+    }
+    removered();
+
+    if (piece == highlight_state) {
+        cleardot();
+        clearboard(piece);
+        removered();
+        highlight_state = null;
+        return;
+    }
+    cleardot();
+    movestate = piece;
+    highlight_state = piece;
+
+    highlight(piece);
+
+    const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
+
+    const current_pos = piece.current_position;
+    const currenttwo = current_pos[1] - 1;
+    const currectone = current_pos[0].charCodeAt(0) - 97;
+    const hightlight_squareid = [];
+    const capture_square = [];
+
+    for (var i = currenttwo - 1; i >= 0; i--) {
+        const mn = col[currectone] + row[i];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+    }
+    for (var i = (currenttwo + 1); i <= 7; i++) {
+        const mn = col[currectone] + row[i];
+
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+    }
+
+    for (var i = currectone + 1; i <= 7; i++) {
+        const mn = col[i] + row[currenttwo];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+
+    }
+    for (var i = currectone - 1; i >= 0; i--) {
+        const mn = col[i] + row[currenttwo];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+    }
 
 
 
+    const highlight_captureid = [];
+
+
+    capture_square.forEach(element => {
+        if (checkpiece(element, "Black")) {
+            highlight_captureid.push(element);
+        }
+    });
+
+    dots(hightlight_squareid);
+
+    hightlight_squareid.forEach(highlight => {
+        globalstate.forEach(row => {
+            row.forEach(element => {
+                if (element.id == highlight) {
+                    element.highlight = true;
+                }
+            });
+        });
+    });
+
+}
+
+function whiterook({ piece }) {
+    cleardot();
+    const isred = document.getElementById(piece.current_position);
+    if (isred.classList.contains("capturecolor")) {
+        removered();
+        cleardot();
+        if (highlight_state) {
+            clearboard(highlight_state);
+        }
+        return;
+    }
+    removered();
+
+    if (piece == highlight_state) {
+        cleardot();
+        clearboard(piece);
+        removered();
+        highlight_state = null;
+        return;
+    }
+    cleardot();
+    movestate = piece;
+    highlight_state = piece;
+
+    highlight(piece);
+
+    const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
+
+    const current_pos = piece.current_position;
+    const currenttwo = current_pos[1] - 1;
+    const currectone = current_pos[0].charCodeAt(0) - 97;
+    const hightlight_squareid = [];
+    const capture_square = [];
+
+    for (var i = currenttwo - 1; i >= 0; i--) {
+        const mn = col[currectone] + row[i];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+    }
+    for (var i = (currenttwo + 1); i <= 7; i++) {
+        const mn = col[currectone] + row[i];
+
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+    }
+
+    for (var i = currectone + 1; i <= 7; i++) {
+        const mn = col[i] + row[currenttwo];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+
+    }
+    for (var i = currectone - 1; i >= 0; i--) {
+        const mn = col[i] + row[currenttwo];
+        if (document.getElementById(mn).innerHTML) {
+            capture_square.push(mn);
+            break;
+        }
+        else {
+            hightlight_squareid.push(mn);
+        }
+    }
 
 
 
+    const highlight_captureid = [];
 
 
+    capture_square.forEach(element => {
+        if (checkpiece(element, "White")) {
+            highlight_captureid.push(element);
+        }
+    });
 
+    dots(hightlight_squareid);
 
+    hightlight_squareid.forEach(highlight => {
+        globalstate.forEach(row => {
+            row.forEach(element => {
+                if (element.id == highlight) {
+                    element.highlight = true;
+                }
+            });
+        });
+    });
 
-
+}
 
 
 function clearboard(piece) {
     const flatarr = globalstate.flat();
     flatarr.forEach(element => {
         const xyz = document.getElementById(element.id);
-
         if (xyz.classList.contains("highlightYellow")) {
             xyz.classList.remove("highlightYellow");
         }
-
     });
 }
 
@@ -204,11 +984,9 @@ function cleardot() {
 }
 
 
-function attackpawn(piece,id){
+function attackpawn(piece, id) {
 
 }
-
-
 function movepawn(piece, id) {
     const flatdata = globalstate.flat();
     flatdata.forEach(el => {
@@ -259,14 +1037,13 @@ function highlight(piece) {
 }
 
 function whitepawnclick({ piece }) {
+    cleardot();
     const isred = document.getElementById(piece.current_position);
 
     if (isred.classList.contains("capturecolor")) {
-
-       
         removered();
-        attackpawn(movestate,piece.current_position);
-        
+        attackpawn(movestate, piece.current_position);
+
         cleardot();
         if (highlight_state) {
             clearboard(highlight_state);
@@ -274,7 +1051,7 @@ function whitepawnclick({ piece }) {
         return;
     }
     removered();
-    
+
     const current_pos = piece.current_position;
     const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) + 1}`;
     const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) + 1}`;
@@ -297,10 +1074,21 @@ function whitepawnclick({ piece }) {
     highlight(piece);
 
     if (current_pos[1] == 2) {
-        const hightlight_squareid = [
-            `${current_pos[0]}${Number(current_pos[1]) + 1}`,
-            `${current_pos[0]}${Number(current_pos[1]) + 2}`,
-        ];
+
+
+        var x = `${current_pos[0]}${Number(current_pos[1]) + 1}`;
+        var y = `${current_pos[0]}${Number(current_pos[1]) + 2}`;
+        const hightlight_squareid = [];
+        if (document.getElementById(x).innerHTML) {
+        }
+        else {
+            hightlight_squareid.push(x);
+            if (document.getElementById(y).innerHTML) {
+            }
+            else {
+                hightlight_squareid.push(y);
+            }
+        }
         dots(hightlight_squareid);
         movestate = piece;
         hightlight_squareid.forEach(highlight => {
@@ -314,9 +1102,15 @@ function whitepawnclick({ piece }) {
         });
     }
     else {
-        const hightlight_squareid = [
-            `${current_pos[0]}${Number(current_pos[1]) + 1}`,
-        ];
+        var x = `${current_pos[0]}${Number(current_pos[1]) + 1}`;
+
+        const hightlight_squareid = [];
+        if (document.getElementById(x).innerHTML) {
+        }
+        else {
+            hightlight_squareid.push(x);
+
+        }
         dots(hightlight_squareid);
         movestate = piece;
         hightlight_squareid.forEach(highlight => {
@@ -332,6 +1126,7 @@ function whitepawnclick({ piece }) {
 }
 
 function blackpawnclick({ piece }) {
+    cleardot();
     const isred = document.getElementById(piece.current_position);
     if (isred.classList.contains("capturecolor")) {
         removered();
@@ -365,11 +1160,19 @@ function blackpawnclick({ piece }) {
     highlight(piece);
 
     if (current_pos[1] == 7) {
-        const hightlight_squareid = [
-            `${current_pos[0]}${Number(current_pos[1]) - 1}`,
-            `${current_pos[0]}${Number(current_pos[1]) - 2}`,
-
-        ];
+        var x = `${current_pos[0]}${Number(current_pos[1]) - 1}`;
+        var y = `${current_pos[0]}${Number(current_pos[1]) - 2}`;
+        const hightlight_squareid = [];
+        if (document.getElementById(x).innerHTML) {
+        }
+        else {
+            hightlight_squareid.push(x);
+            if (document.getElementById(y).innerHTML) {
+            }
+            else {
+                hightlight_squareid.push(y);
+            }
+        }
         dots(hightlight_squareid);
         movestate = piece;
 
@@ -385,9 +1188,14 @@ function blackpawnclick({ piece }) {
 
     }
     else {
-        const hightlight_squareid = [
-            `${current_pos[0]}${Number(current_pos[1]) - 1}`,
-        ];
+        var x = `${current_pos[0]}${Number(current_pos[1]) - 1}`;
+
+        const hightlight_squareid = [];
+        if (document.getElementById(x).innerHTML) {
+        }
+        else {
+            hightlight_squareid.push(x);
+        }
         dots(hightlight_squareid);
         movestate = piece;
 
@@ -408,20 +1216,38 @@ function agrawal() {
         if (event.target.localName === "img") {
             const clickedid = event.target.parentNode.id;
             const flatarr = globalstate.flat();
-            
+
             const square = (flatarr.find(el => el.id === clickedid));
- 
+
             if (square.piece.piece_name === "White_pawn") {
                 whitepawnclick(square);
             }
             else if (square.piece.piece_name === "Black_pawn") {
                 blackpawnclick(square);
             }
-            else if(square.piece.piece_name==="Black_rook"){
+            else if (square.piece.piece_name === "Black_rook") {
                 blackrook(square);
             }
-            else if(square.piece.piece_name==="White_rook"){
+            else if (square.piece.piece_name === "White_rook") {
                 whiterook(square);
+            }
+            else if (square.piece.piece_name === "Black_bishop") {
+                blackbishop(square);
+            }
+            else if (square.piece.piece_name === "White_bishop") {
+                whitebishop(square);
+            }
+            else if (square.piece.piece_name === "White_queen") {
+                whitequeen(square);
+            }
+            else if (square.piece.piece_name === "Black_queen") {
+                blackqueen(square);
+            }
+            else if (square.piece.piece_name === "Black_knight") {
+                blackknight(square);
+            }
+            else if (square.piece.piece_name === "White_knight") {
+                whiteknight(square);
             }
         }
         else {
@@ -442,9 +1268,10 @@ function agrawal() {
                 if (highlight_state) {
                     clearboard(highlight_state);
                 }
+                highlight_state = null;
+                movestate = null;
             }
         }
     })
 }
-
 export { agrawal };

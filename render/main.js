@@ -1,84 +1,7 @@
-// import { blackpawn,whitebishop,whiteking,whiteknight,whitequeen,whiterook,blackbishop,blackking,blackknight,blackqueen,blackrook,whitepawn } from "../data/pieces.js";
 
 import * as piece from "../data/pieces.js";
 
 import { ROOT_DIV } from "../helper/constant.js";
-
-import { globalstate } from "../index.js";
-
-// const ROOT_DIV=document.getElementById("root");
-
-
-
-// function global state renderer
-
-function globalstaterenderer() {
-    // clearHighlight();
-
-    globalstate.forEach(row => {
-        row.forEach(element => {
-            if (element.highlight) {
-                const highlightSpan = document.createElement("span");
-                highlightSpan.classList.add("highlight");
-                document.getElementById(element.id).appendChild(highlightSpan);
-            }
-            else if (element.highlight === null) {
-                const el = document.getElementById(element.id);
-                const highlights = Array.from( el.getElementsByTagName("span"));
-                highlights.forEach(element => {
-                    el.removeChild(element);
-                });
-                // document.getElementById(element.id).innerHTML="";
-            }
-            if (element.piece != null) {
-
-            }
-
-        });
-    });
-}
-
-
-//move element to square with id
-
-function moveelemet(piece, id) {
-    console.log(piece);
-
-    const flatdata = globalstate.flat();
-    flatdata.forEach(el => {
-        if (el.id === piece.current_position) {
-            delete el.piece;
-        }
-        if (el.id === id) {
-            el.piece = piece;
-        }
-    });
-    clearHighlight();
-    const previouspiece = document.getElementById(piece.current_position);
-    const currentpiece = document.getElementById(id);
-    currentpiece.innerHTML = previouspiece.innerHTML;
-    previouspiece.innerHTML = "";
-    previouspiece.classList.remove("highlightYellow");
-    piece.current_position = id;
-}
-
-
-//clear previous self highlight
-function clearpreviousselfhighlight(piece) {
-
-    if (piece) {
-    
-        document.getElementById(piece.current_position).classList.remove("highlightYellow");
-    }
-}
-
-
-
-function selfhighlight(piece) {
-    // console.log(piece);
-    document.getElementById(piece.current_position).classList.add("highlightYellow");
-}
-
 
 // rendering pieces in real time
 function piecerender(data) {
@@ -103,7 +26,6 @@ function piecerender(data) {
         });
     });
 }
-
 
 // initializes the board
 function initgamerender(data) {
@@ -186,34 +108,5 @@ function initgamerender(data) {
     piecerender(data);
 }
 
-// render highlight circle
 
-function renderhighlight(squareid) {
-    const highlightSpan = document.createElement("span");
-    highlightSpan.classList.add("highlight");
-    document.getElementById(squareid).appendChild(highlightSpan);
-
-}
-
-
-//clear all highlight from the board
-
-function clearHighlight() {
-    const flatdata = globalstate.flat();
-    flatdata.forEach(el => {
-        if (el.capturehighlight) {
-            document.getElementById(el.id).classList.remove("capturecolor");
-        }
-
-    });
-    flatdata.forEach(el => {
-        if (el.highlight) {
-            el.highlight = null;
-        }
-        globalstaterenderer();
-    });
-}
-
-
-
-export { initgamerender, renderhighlight, clearHighlight, selfhighlight, clearpreviousselfhighlight, moveelemet, globalstaterenderer };
+export { initgamerender };
