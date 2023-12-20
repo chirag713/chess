@@ -4,7 +4,6 @@
 
 function Square(color ,id ,piece){
     return {
-
         color ,id ,piece
     };
 }

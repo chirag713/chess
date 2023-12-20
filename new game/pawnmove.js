@@ -5,27 +5,46 @@ let highlight_state = null;
 
 let movestate = null;
 
+var whitekingmove = null;
+var blackkingmove = null;
+var whiteleftrookmove = null;
+var whiterightrookmove = null;
+var blackleftrookmove = null;
+var blackrightrookmove = null;
+
 let checkwhiteorblack = 1;
 
 var greenhighlight = null;
 
+var piecewhiteblack = 1;
 
 var blackkingpos = "e8";
+
 var whitekingpos = "e1";
 
 
 function whiteking({ piece }) {
-
     const isred = document.getElementById(piece.current_position);
     if (isred.classList.contains("capturecolor")) {
         removered();
+        console.log(highlight_state,piece.current_position);
         cleardot();
+        movepawn(highlight_state,piece.current_position);
         if (highlight_state) {
             clearboard(highlight_state);
         }
+        cleardot();
         return;
     }
-    removered();
+    cleardot();
+    
+    if (highlight_state) {
+        clearboard(highlight_state);
+    }
+    if (piecewhiteblack == 0) {
+        highlight_state = null;
+        return;
+    }
 
     if (piece == highlight_state) {
         cleardot();
@@ -55,6 +74,36 @@ function whiteking({ piece }) {
             }
         }
     }
+    if (whitekingmove === null && whiteleftrookmove === null) {
+        const idcheck = ["b1", "c1", "d1"];
+        var remind = 1;
+        idcheck.forEach(element => {
+
+            if (document.getElementById(element).innerHTML) {
+                remind = 0;
+            }
+            console.log();
+        });
+        if (remind == 1) {
+            hightlight_squareid.push("c1");
+        }
+    }
+    if (whitekingmove === null && whiterightrookmove === null) {
+        const idcheck = ["f1", "g1"];
+        var remind = 1;
+        idcheck.forEach(element => {
+
+            if (document.getElementById(element).innerHTML) {
+                remind = 0;
+            }
+            console.log();
+        });
+        if (remind == 1) {
+            hightlight_squareid.push("g1");
+        }
+    }
+
+
     cleardot();
     movestate = piece;
     highlight_state = piece;
@@ -82,17 +131,27 @@ function whiteking({ piece }) {
 }
 
 function blackking({ piece }) {
-
     const isred = document.getElementById(piece.current_position);
     if (isred.classList.contains("capturecolor")) {
         removered();
+        console.log(highlight_state,piece.current_position);
         cleardot();
+        movepawn(highlight_state,piece.current_position);
         if (highlight_state) {
             clearboard(highlight_state);
         }
+        cleardot();
         return;
     }
-    removered();
+    cleardot();
+    
+    if (highlight_state) {
+        clearboard(highlight_state);
+    }
+    if (piecewhiteblack == 1) {
+        highlight_state = null;
+        return;
+    }
 
     if (piece == highlight_state) {
         cleardot();
@@ -122,6 +181,34 @@ function blackking({ piece }) {
             }
         }
     }
+    if (blackkingmove === null && blackleftrookmove === null) {
+        const idcheck = ["b8", "c8", "d8"];
+        var remind = 1;
+        idcheck.forEach(element => {
+
+            if (document.getElementById(element).innerHTML) {
+                remind = 0;
+            }
+            console.log();
+        });
+        if (remind == 1) {
+            hightlight_squareid.push("c8");
+        }
+    }
+    if (blackkingmove === null && blackrightrookmove === null) {
+        const idcheck = ["f8", "g8"];
+        var remind = 1;
+        idcheck.forEach(element => {
+
+            if (document.getElementById(element).innerHTML) {
+                remind = 0;
+            }
+            console.log();
+        });
+        if (remind == 1) {
+            hightlight_squareid.push("g8");
+        }
+    }
     cleardot();
     movestate = piece;
     highlight_state = piece;
@@ -147,7 +234,6 @@ function blackking({ piece }) {
     });
 
 }
-
 
 function clearcheck(piece) {
     if (piece) {
@@ -645,21 +731,27 @@ function check(piece) {
 }
 
 function blackknight({ piece }) {
-
-
     const isred = document.getElementById(piece.current_position);
     if (isred.classList.contains("capturecolor")) {
         removered();
+        console.log(highlight_state,piece.current_position);
         cleardot();
+        movepawn(highlight_state,piece.current_position);
         if (highlight_state) {
             clearboard(highlight_state);
         }
+        cleardot();
         return;
     }
-    removered();
-
-
-
+    cleardot();
+    
+    if (highlight_state) {
+        clearboard(highlight_state);
+    }
+    if (piecewhiteblack == 1) {
+        highlight_state = null;
+        return;
+    }
 
     if (piece == highlight_state) {
         cleardot();
@@ -722,21 +814,27 @@ function blackknight({ piece }) {
 }
 
 function whiteknight({ piece }) {
-
-
     const isred = document.getElementById(piece.current_position);
     if (isred.classList.contains("capturecolor")) {
         removered();
+        console.log(highlight_state,piece.current_position);
         cleardot();
+        movepawn(highlight_state,piece.current_position);
         if (highlight_state) {
             clearboard(highlight_state);
         }
+        cleardot();
         return;
     }
-    removered();
-
-
-
+    cleardot();
+    
+    if (highlight_state) {
+        clearboard(highlight_state);
+    }
+    if (piecewhiteblack == 0) {
+        highlight_state = null;
+        return;
+    }
 
     if (piece == highlight_state) {
         cleardot();
@@ -800,22 +898,27 @@ function whiteknight({ piece }) {
 }
 
 function whitequeen({ piece }) {
-    cleardot();
-
-
     const isred = document.getElementById(piece.current_position);
     if (isred.classList.contains("capturecolor")) {
         removered();
+        console.log(highlight_state,piece.current_position);
         cleardot();
+        movepawn(highlight_state,piece.current_position);
         if (highlight_state) {
             clearboard(highlight_state);
         }
+        cleardot();
         return;
     }
-    removered();
-
-
-
+    cleardot();
+    
+    if (highlight_state) {
+        clearboard(highlight_state);
+    }
+    if (piecewhiteblack == 0) {
+        highlight_state = null;
+        return;
+    }
 
     if (piece == highlight_state) {
         cleardot();
@@ -963,22 +1066,27 @@ function whitequeen({ piece }) {
 }
 
 function blackqueen({ piece }) {
-    cleardot();
-
-
     const isred = document.getElementById(piece.current_position);
     if (isred.classList.contains("capturecolor")) {
         removered();
+        console.log(highlight_state,piece.current_position);
         cleardot();
+        movepawn(highlight_state,piece.current_position);
         if (highlight_state) {
             clearboard(highlight_state);
         }
+        cleardot();
         return;
     }
-    removered();
-
-
-
+    cleardot();
+    
+    if (highlight_state) {
+        clearboard(highlight_state);
+    }
+    if (piecewhiteblack == 1) {
+        highlight_state = null;
+        return;
+    }
 
     if (piece == highlight_state) {
         cleardot();
@@ -1125,22 +1233,27 @@ function blackqueen({ piece }) {
 }
 
 function whitebishop({ piece }) {
-    cleardot();
-
-
     const isred = document.getElementById(piece.current_position);
     if (isred.classList.contains("capturecolor")) {
         removered();
+        console.log(highlight_state,piece.current_position);
         cleardot();
+        movepawn(highlight_state,piece.current_position);
         if (highlight_state) {
             clearboard(highlight_state);
         }
+        cleardot();
         return;
     }
-    removered();
-
-
-
+    cleardot();
+    
+    if (highlight_state) {
+        clearboard(highlight_state);
+    }
+    if (piecewhiteblack == 0) {
+        highlight_state = null;
+        return;
+    }
 
     if (piece == highlight_state) {
         cleardot();
@@ -1235,33 +1348,30 @@ function whitebishop({ piece }) {
             });
         });
     });
-
-
-
-
-
-
-
-
 }
 
 function blackbishop({ piece }) {
-    cleardot();
-
-
     const isred = document.getElementById(piece.current_position);
     if (isred.classList.contains("capturecolor")) {
         removered();
+        console.log(highlight_state,piece.current_position);
         cleardot();
+        movepawn(highlight_state,piece.current_position);
         if (highlight_state) {
             clearboard(highlight_state);
         }
+        cleardot();
         return;
     }
-    removered();
-
-
-
+    cleardot();
+    
+    if (highlight_state) {
+        clearboard(highlight_state);
+    }
+    if (piecewhiteblack == 1) {
+        highlight_state = null;
+        return;
+    }
 
     if (piece == highlight_state) {
         cleardot();
@@ -1359,17 +1469,27 @@ function blackbishop({ piece }) {
 }
 
 function blackrook({ piece }) {
-    cleardot();
     const isred = document.getElementById(piece.current_position);
     if (isred.classList.contains("capturecolor")) {
         removered();
+        console.log(highlight_state,piece.current_position);
         cleardot();
+        movepawn(highlight_state,piece.current_position);
         if (highlight_state) {
             clearboard(highlight_state);
         }
+        cleardot();
         return;
     }
-    removered();
+    cleardot();
+    
+    if (highlight_state) {
+        clearboard(highlight_state);
+    }
+    if (piecewhiteblack == 1) {
+        highlight_state = null;
+        return;
+    }
 
     if (piece == highlight_state) {
         cleardot();
@@ -1463,17 +1583,27 @@ function blackrook({ piece }) {
 }
 
 function whiterook({ piece }) {
-    cleardot();
     const isred = document.getElementById(piece.current_position);
     if (isred.classList.contains("capturecolor")) {
         removered();
+        console.log(highlight_state,piece.current_position);
         cleardot();
+        movepawn(highlight_state,piece.current_position);
         if (highlight_state) {
             clearboard(highlight_state);
         }
+        cleardot();
         return;
     }
-    removered();
+    cleardot();
+    
+    if (highlight_state) {
+        clearboard(highlight_state);
+    }
+    if (piecewhiteblack == 0) {
+        highlight_state = null;
+        return;
+    }
 
     if (piece == highlight_state) {
         cleardot();
@@ -1616,11 +1746,65 @@ function cleardot() {
     });
 }
 
-
-function attackpawn(piece, id) {
-
+function temp({ piece }, id) {
+    movepawn(piece, id);
 }
+
 function movepawn(piece, id) {
+
+    if (piece.piece_name === "White_king") {
+        whitekingmove = true;
+        {
+            if (id == "c1") {
+                const flatarr = globalstate.flat();
+                const square = (flatarr.find(el => el.id === "a1"));
+                temp(square, "d1");
+                piecewhiteblack = (piecewhiteblack + 1) % 2;
+            }
+            else if (id == "g1") {
+                const flatarr = globalstate.flat();
+                const square = (flatarr.find(el => el.id === "h1"));
+                temp(square, "g1");
+                piecewhiteblack = (piecewhiteblack + 1) % 2;
+            }
+        }
+    }
+    else if (piece.piece_name === "Black_king") {
+        whitekingmove = true;
+        {
+            if (id == "c8") {
+                const flatarr = globalstate.flat();
+                const square = (flatarr.find(el => el.id === "a8"));
+                temp(square, "d8");
+                piecewhiteblack = (piecewhiteblack + 1) % 2;
+            }
+            else if (id == "g8") {
+                const flatarr = globalstate.flat();
+                const square = (flatarr.find(el => el.id === "h8"));
+                temp(square, "g8");
+                piecewhiteblack = (piecewhiteblack + 1) % 2;
+            }
+        }
+    }
+    else if (piece.piece_name == "White_rook") {
+        if(piece.current_position==="a1"){
+            whiteleftrookmove=true;
+        }
+        else if(piece.current_position==="h1"){
+            whiterightrookmove=true;
+        }
+    }
+    else if (piece.piece_name == "Black_rook") {
+        if(piece.current_position==="a8"){
+            blackleftrookmove=true;
+        }
+        else if(piece.current_position==="h8"){
+            blackrightrookmove=true;
+        }
+    }
+
+    piecewhiteblack = (piecewhiteblack + 1) % 2;
+
     if (piece.current_position === blackkingpos)
         blackkingpos = id;
     if (piece.current_position === whitekingpos)
@@ -1676,20 +1860,27 @@ function highlight(piece) {
 }
 
 function whitepawnclick({ piece }) {
-    cleardot();
     const isred = document.getElementById(piece.current_position);
-
     if (isred.classList.contains("capturecolor")) {
         removered();
-        attackpawn(movestate, piece.current_position);
-
+        console.log(highlight_state,piece.current_position);
         cleardot();
+        movepawn(highlight_state,piece.current_position);
         if (highlight_state) {
             clearboard(highlight_state);
         }
+        cleardot();
         return;
     }
-    removered();
+    cleardot();
+    
+    if (highlight_state) {
+        clearboard(highlight_state);
+    }
+    if (piecewhiteblack == 0) {
+        highlight_state = null;
+        return;
+    }
 
     const current_pos = piece.current_position;
     const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) + 1}`;
@@ -1765,18 +1956,27 @@ function whitepawnclick({ piece }) {
 }
 
 function blackpawnclick({ piece }) {
-    cleardot();
     const isred = document.getElementById(piece.current_position);
     if (isred.classList.contains("capturecolor")) {
         removered();
+        console.log(highlight_state,piece.current_position);
         cleardot();
+        movepawn(highlight_state,piece.current_position);
         if (highlight_state) {
             clearboard(highlight_state);
         }
+        cleardot();
         return;
     }
-    removered();
-
+    cleardot();
+    
+    if (highlight_state) {
+        clearboard(highlight_state);
+    }
+    if (piecewhiteblack == 1) {
+        highlight_state = null;
+        return;
+    }
     const current_pos = piece.current_position;
     const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) - 1}`;
     const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) - 1}`;
