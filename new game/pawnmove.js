@@ -5,6 +5,500 @@ let highlight_state = null;
 
 let movestate = null;
 
+let checkwhiteorblack = 1;
+
+
+let blackkingpos = "e8";
+let whitekingpos = "e1";
+
+
+function clearcheck() {
+    var xyz = document.getElementById(blackkingpos);
+
+    if (xyz.classList.contains("check")) {
+        xyz.classList.remove("check");
+    }
+    xyz = document.getElementById(whitekingpos);
+
+    if (xyz.classList.contains("check")) {
+        xyz.classList.remove("check");
+    }
+}
+
+function check(piece) {
+    const name = piece.piece_name;
+    if (name === "White_pawn") {
+        const current_pos = piece.current_position;
+        const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) + 1}`;
+        if (blackkingpos === col1) {
+            document.getElementById(blackkingpos).classList.add("check");
+        }
+        else {
+            const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) + 1}`;
+            if (blackkingpos === col2) {
+                document.getElementById(blackkingpos).classList.add("check");
+            }
+        }
+    }
+    else if (name === "Black_pawn") {
+        const current_pos = piece.current_position;
+        const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) - 1}`;
+        if (whitekingpos === col1) {
+            document.getElementById(blackkingpos).classList.add("check");
+        }
+        else {
+            const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) - 1}`;
+            if (whitekingpos === col2) {
+                document.getElementById(blackkingpos).classList.add("check");
+            }
+        }
+    }
+    else if (name === "Black_bishop") {
+        const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+        const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
+        const current_pos = piece.current_position;
+        const currentrow = current_pos[1] - 1;
+        const currentcol = current_pos[0].charCodeAt(0) - 97;
+        const capture_square = [];
+        var i = currentcol + 1, j = currentrow + 1;
+        for (; i <= 7 && j <= 7;) {
+            const mn = col[i] + row[j];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+            i++;
+            j++;
+        }
+        i = currentcol - 1;
+        j = currentrow + 1;
+        for (; j <= 7 && i >= 0;) {
+            const mn = col[i] + row[j];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+            j++;
+            i--;
+        }
+        i = currentcol + 1;
+        j = currentrow - 1;
+        for (; i <= 7 && j >= 0;) {
+            const mn = col[i] + row[j];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+            i++;
+            j--;
+        }
+        i = currentcol - 1;
+        j = currentrow - 1;
+        for (; j >= 0 && i >= 0;) {
+            const mn = col[i] + row[j];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+            j--;
+            i--;
+        }
+        capture_square.forEach(element => {
+            if (element === whitekingpos) {
+                document.getElementById(whitekingpos).classList.add("check");
+            }
+        });
+
+    }
+    else if (name === "White_bishop") {
+        const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+        const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
+        const current_pos = piece.current_position;
+        const currentrow = current_pos[1] - 1;
+        const currentcol = current_pos[0].charCodeAt(0) - 97;
+        const capture_square = [];
+        var i = currentcol + 1, j = currentrow + 1;
+        for (; i <= 7 && j <= 7;) {
+            const mn = col[i] + row[j];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+            i++;
+            j++;
+        }
+        i = currentcol - 1;
+        j = currentrow + 1;
+        for (; j <= 7 && i >= 0;) {
+            const mn = col[i] + row[j];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+            j++;
+            i--;
+        }
+        i = currentcol + 1;
+        j = currentrow - 1;
+        for (; i <= 7 && j >= 0;) {
+            const mn = col[i] + row[j];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+            i++;
+            j--;
+        }
+        i = currentcol - 1;
+        j = currentrow - 1;
+        for (; j >= 0 && i >= 0;) {
+            const mn = col[i] + row[j];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+            j--;
+            i--;
+        }
+        capture_square.forEach(element => {
+            if (element === blackkingpos) {
+                document.getElementById(blackkingpos).classList.add("check");
+            }
+        });
+    }
+    else if (name === "White_rook") {
+
+        const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+        const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
+
+        const current_pos = piece.current_position;
+        const currenttwo = current_pos[1] - 1;
+        const currectone = current_pos[0].charCodeAt(0) - 97;
+        const capture_square = [];
+
+        for (var i = currenttwo - 1; i >= 0; i--) {
+            const mn = col[currectone] + row[i];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+        }
+        for (var i = (currenttwo + 1); i <= 7; i++) {
+            const mn = col[currectone] + row[i];
+
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+        }
+
+        for (var i = currectone + 1; i <= 7; i++) {
+            const mn = col[i] + row[currenttwo];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+        }
+        for (var i = currectone - 1; i >= 0; i--) {
+            const mn = col[i] + row[currenttwo];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+        }
+        capture_square.forEach(element => {
+            if (element === blackkingpos) {
+                document.getElementById(blackkingpos).classList.add("check");
+            }
+        });
+    }
+    else if (name === "Black_rook") {
+
+        const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+        const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
+
+        const current_pos = piece.current_position;
+        const currenttwo = current_pos[1] - 1;
+        const currectone = current_pos[0].charCodeAt(0) - 97;
+        const capture_square = [];
+
+        for (var i = currenttwo - 1; i >= 0; i--) {
+            const mn = col[currectone] + row[i];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+        }
+        for (var i = (currenttwo + 1); i <= 7; i++) {
+            const mn = col[currectone] + row[i];
+
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+        }
+
+        for (var i = currectone + 1; i <= 7; i++) {
+            const mn = col[i] + row[currenttwo];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+        }
+        for (var i = currectone - 1; i >= 0; i--) {
+            const mn = col[i] + row[currenttwo];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+        }
+        capture_square.forEach(element => {
+            if (element === whitekingpos) {
+                document.getElementById(whitekingpos).classList.add("check");
+            }
+        });
+    }
+    else if (name === "White_queen") {
+        const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+        const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
+        const current_pos = piece.current_position;
+
+        const currenttwo = current_pos[1] - 1;
+        const currectone = current_pos[0].charCodeAt(0) - 97;
+        const currentrow = current_pos[1] - 1;
+        const currentcol = current_pos[0].charCodeAt(0) - 97;
+        const capture_square = [];
+        var i = currentcol + 1, j = currentrow + 1;
+
+        for (; i <= 7 && j <= 7;) {
+            const mn = col[i] + row[j];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+            i++;
+            j++;
+        }
+        i = currentcol - 1;
+        j = currentrow + 1;
+        for (; j <= 7 && i >= 0;) {
+            const mn = col[i] + row[j];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+            j++;
+            i--;
+        }
+        i = currentcol + 1;
+        j = currentrow - 1;
+        for (; i <= 7 && j >= 0;) {
+            const mn = col[i] + row[j];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+            i++;
+            j--;
+        }
+        i = currentcol - 1;
+        j = currentrow - 1;
+        for (; j >= 0 && i >= 0;) {
+            const mn = col[i] + row[j];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+            j--;
+            i--;
+        }
+        for (var i = currenttwo - 1; i >= 0; i--) {
+            const mn = col[currectone] + row[i];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+        }
+        for (var i = (currenttwo + 1); i <= 7; i++) {
+            const mn = col[currectone] + row[i];
+
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+        }
+
+        for (var i = currectone + 1; i <= 7; i++) {
+            const mn = col[i] + row[currenttwo];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+        }
+        for (var i = currectone - 1; i >= 0; i--) {
+            const mn = col[i] + row[currenttwo];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+        }
+        capture_square.forEach(element => {
+            if (element === blackkingpos) {
+                document.getElementById(blackkingpos).classList.add("check");
+            }
+        });
+    }
+    else if (name === "Black_queen") {
+        const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+        const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
+        const current_pos = piece.current_position;
+
+        const currenttwo = current_pos[1] - 1;
+        const currectone = current_pos[0].charCodeAt(0) - 97;
+        const currentrow = current_pos[1] - 1;
+        const currentcol = current_pos[0].charCodeAt(0) - 97;
+        const capture_square = [];
+        var i = currentcol + 1, j = currentrow + 1;
+
+        for (; i <= 7 && j <= 7;) {
+            const mn = col[i] + row[j];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+            i++;
+            j++;
+        }
+        i = currentcol - 1;
+        j = currentrow + 1;
+        for (; j <= 7 && i >= 0;) {
+            const mn = col[i] + row[j];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+            j++;
+            i--;
+        }
+        i = currentcol + 1;
+        j = currentrow - 1;
+        for (; i <= 7 && j >= 0;) {
+            const mn = col[i] + row[j];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+            i++;
+            j--;
+        }
+        i = currentcol - 1;
+        j = currentrow - 1;
+        for (; j >= 0 && i >= 0;) {
+            const mn = col[i] + row[j];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+            j--;
+            i--;
+        }
+        for (var i = currenttwo - 1; i >= 0; i--) {
+            const mn = col[currectone] + row[i];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+        }
+        for (var i = (currenttwo + 1); i <= 7; i++) {
+            const mn = col[currectone] + row[i];
+
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+        }
+
+        for (var i = currectone + 1; i <= 7; i++) {
+            const mn = col[i] + row[currenttwo];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+        }
+        for (var i = currectone - 1; i >= 0; i--) {
+            const mn = col[i] + row[currenttwo];
+            if (document.getElementById(mn).innerHTML) {
+                capture_square.push(mn);
+                break;
+            }
+        }
+        capture_square.forEach(element => {
+            if (element === whitekingpos) {
+                document.getElementById(whitekingpos).classList.add("check");
+            }
+        });
+    }
+    else if (name === "Black_knight") {
+        const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+        const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
+        const current_pos = piece.current_position;
+        const currentrow = current_pos[1] - 1;
+        const currentcol = current_pos[0].charCodeAt(0) - 97;
+        var requirecol = [currentcol + 2, currentcol + 2, currentcol + 1, currentcol + 1, currentcol - 1, currentcol - 1, currentcol - 2, currentcol - 2];
+        var requirerow = [currentrow + 1, currentrow - 1, currentrow + 2, currentrow - 2, currentrow + 2, currentrow - 2, currentrow - 1, currentrow + 1];
+
+
+        const hightlight_squareid = [];
+        const capture_square = [];
+        for (var i = 0; i < 8; i++) {
+            if (requirecol[i] < 8 && requirerow[i] < 8 && requirecol[i] >= 0 && requirerow[i] >= 0) {
+                var mn = col[requirecol[i]] + row[requirerow[i]];
+                if (document.getElementById(mn).innerHTML) {
+                    capture_square.push(mn);
+                }
+                else {
+                    hightlight_squareid.push(mn);
+                }
+            }
+        }
+        capture_square.forEach(element => {
+            if (element === whitekingpos) {
+                document.getElementById(whitekingpos).classList.add("check");
+            }
+        });
+
+    }
+    else if (name === "Black_knight") {
+        const col = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+        const row = ['1', '2', '3', '4', '5', '6', '7', '8'];
+        const current_pos = piece.current_position;
+        const currentrow = current_pos[1] - 1;
+        const currentcol = current_pos[0].charCodeAt(0) - 97;
+        var requirecol = [currentcol + 2, currentcol + 2, currentcol + 1, currentcol + 1, currentcol - 1, currentcol - 1, currentcol - 2, currentcol - 2];
+        var requirerow = [currentrow + 1, currentrow - 1, currentrow + 2, currentrow - 2, currentrow + 2, currentrow - 2, currentrow - 1, currentrow + 1];
+
+
+        const hightlight_squareid = [];
+        const capture_square = [];
+        for (var i = 0; i < 8; i++) {
+            if (requirecol[i] < 8 && requirerow[i] < 8 && requirecol[i] >= 0 && requirerow[i] >= 0) {
+                var mn = col[requirecol[i]] + row[requirerow[i]];
+                if (document.getElementById(mn).innerHTML) {
+                    capture_square.push(mn);
+                }
+                else {
+                    hightlight_squareid.push(mn);
+                }
+            }
+        }
+        capture_square.forEach(element => {
+            if (element === blackkingpos) {
+                document.getElementById(blackkingpos).classList.add("check");
+            }
+        });
+
+    }
+}
 
 function blackknight({ piece }) {
 
@@ -115,7 +609,7 @@ function whiteknight({ piece }) {
     const current_pos = piece.current_position;
     const currentrow = current_pos[1] - 1;
     const currentcol = current_pos[0].charCodeAt(0) - 97;
-  
+
     var requirecol = [currentcol + 2, currentcol + 2, currentcol + 1, currentcol + 1, currentcol - 1, currentcol - 1, currentcol - 2, currentcol - 2];
     var requirerow = [currentrow + 1, currentrow - 1, currentrow + 2, currentrow - 2, currentrow + 2, currentrow - 2, currentrow - 1, currentrow + 1];
 
@@ -160,7 +654,6 @@ function whiteknight({ piece }) {
     });
 
 }
-
 
 function whitequeen({ piece }) {
     cleardot();
@@ -721,7 +1214,6 @@ function blackbishop({ piece }) {
     });
 }
 
-
 function blackrook({ piece }) {
     cleardot();
     const isred = document.getElementById(piece.current_position);
@@ -930,7 +1422,6 @@ function whiterook({ piece }) {
 
 }
 
-
 function clearboard(piece) {
     const flatarr = globalstate.flat();
     flatarr.forEach(element => {
@@ -953,7 +1444,6 @@ function removered() {
     });
 }
 
-
 function checkpiece(id, color) {
     const flatarr = globalstate.flat();
     const opponentcolor = color === "White" ? "Black" : "White";
@@ -972,7 +1462,6 @@ function checkpiece(id, color) {
     return false;
 }
 
-
 function cleardot() {
     const flatarr = globalstate.flat();
     flatarr.forEach(element => {
@@ -988,6 +1477,8 @@ function attackpawn(piece, id) {
 
 }
 function movepawn(piece, id) {
+    checkwhiteorblack=(checkwhiteorblack+1)%2;
+    clearcheck();
     const flatdata = globalstate.flat();
     flatdata.forEach(el => {
         if (el.id === piece.current_position) {
@@ -1006,8 +1497,8 @@ function movepawn(piece, id) {
     piece.current_position = id;
     movestate = null;
     highlight_state = null;
+    check(piece);
 }
-
 
 function dots(arr) {
     cleardot();
@@ -1214,41 +1705,47 @@ function blackpawnclick({ piece }) {
 function agrawal() {
     document.getElementById("root").addEventListener("click", function (event) {
         if (event.target.localName === "img") {
+
             const clickedid = event.target.parentNode.id;
             const flatarr = globalstate.flat();
-
             const square = (flatarr.find(el => el.id === clickedid));
+            if (checkwhiteorblack == 1) {
+                if (square.piece.piece_name === "White_pawn") {
+                    whitepawnclick(square);
+                }
+                else if (square.piece.piece_name === "White_rook") {
+                    whiterook(square);
+                }
+                else if (square.piece.piece_name === "White_bishop") {
+                    whitebishop(square);
+                }
+                else if (square.piece.piece_name === "White_queen") {
+                    whitequeen(square);
+                }
+                else if (square.piece.piece_name === "White_knight") {
+                    whiteknight(square);
+                }
+            }
+            else {
+                if (square.piece.piece_name === "Black_queen") {
+                    blackqueen(square);
+                }
+                else if (square.piece.piece_name === "Black_rook") {
+                    blackrook(square);
+                }
+                else if (square.piece.piece_name === "Black_knight") {
+                    blackknight(square);
+                }
+                else if (square.piece.piece_name === "Black_bishop") {
+                    blackbishop(square);
+                }
+                else if (square.piece.piece_name === "Black_pawn") {
+                    blackpawnclick(square);
+                }
 
-            if (square.piece.piece_name === "White_pawn") {
-                whitepawnclick(square);
             }
-            else if (square.piece.piece_name === "Black_pawn") {
-                blackpawnclick(square);
-            }
-            else if (square.piece.piece_name === "Black_rook") {
-                blackrook(square);
-            }
-            else if (square.piece.piece_name === "White_rook") {
-                whiterook(square);
-            }
-            else if (square.piece.piece_name === "Black_bishop") {
-                blackbishop(square);
-            }
-            else if (square.piece.piece_name === "White_bishop") {
-                whitebishop(square);
-            }
-            else if (square.piece.piece_name === "White_queen") {
-                whitequeen(square);
-            }
-            else if (square.piece.piece_name === "Black_queen") {
-                blackqueen(square);
-            }
-            else if (square.piece.piece_name === "Black_knight") {
-                blackknight(square);
-            }
-            else if (square.piece.piece_name === "White_knight") {
-                whiteknight(square);
-            }
+
+
         }
         else {
             removered()
@@ -1274,4 +1771,5 @@ function agrawal() {
         }
     })
 }
+
 export { agrawal };
