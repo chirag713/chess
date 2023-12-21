@@ -569,7 +569,7 @@ function whiteking({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position);
+        movepawn(highlight_state, piece.current_position,0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -678,7 +678,7 @@ function blackking({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position);
+        movepawn(highlight_state, piece.current_position,0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -1280,7 +1280,7 @@ function blackknight({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position);
+        movepawn(highlight_state, piece.current_position,0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -1364,7 +1364,7 @@ function whiteknight({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position);
+        movepawn(highlight_state, piece.current_position,0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -1449,7 +1449,7 @@ function whitequeen({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position);
+        movepawn(highlight_state, piece.current_position,0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -1632,7 +1632,7 @@ function blackqueen({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position);
+        movepawn(highlight_state, piece.current_position,0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -1814,7 +1814,7 @@ function whitebishop({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position);
+        movepawn(highlight_state, piece.current_position,0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -1939,7 +1939,7 @@ function blackbishop({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position);
+        movepawn(highlight_state, piece.current_position,0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -2064,7 +2064,7 @@ function blackrook({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position);
+        movepawn(highlight_state, piece.current_position,0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -2185,7 +2185,7 @@ function whiterook({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position);
+        movepawn(highlight_state, piece.current_position,0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -2472,7 +2472,7 @@ function whitepawnclick({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position);
+        movepawn(highlight_state, piece.current_position,0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -2480,6 +2480,7 @@ function whitepawnclick({ piece }) {
         return;
     }
     cleardot();
+    removered();
 
     if (highlight_state) {
         clearboard(highlight_state);
@@ -2541,6 +2542,7 @@ function whitepawnclick({ piece }) {
                 });
             });
         });
+        highlight(piece);
     }
     else {
         var x = `${current_pos[0]}${Number(current_pos[1]) + 1}`;
@@ -2573,7 +2575,7 @@ function blackpawnclick({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position);
+        movepawn(highlight_state, piece.current_position,0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -2581,6 +2583,7 @@ function blackpawnclick({ piece }) {
         return;
     }
     cleardot();
+    removered();
 
     if (highlight_state) {
         clearboard(highlight_state);
@@ -2589,6 +2592,7 @@ function blackpawnclick({ piece }) {
         highlight_state = null;
         return;
     }
+    // highlight(piece);
     const current_pos = piece.current_position;
     const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) - 1}`;
     const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) - 1}`;
@@ -2640,6 +2644,7 @@ function blackpawnclick({ piece }) {
                 });
             });
         });
+        highlight(piece);
 
     }
     else {
@@ -2655,6 +2660,7 @@ function blackpawnclick({ piece }) {
         }
         dots(hightlight_squareid);
         movestate = piece;
+        highlight(piece);
 
         hightlight_squareid.forEach(highlight => {
             globalstate.forEach(row => {
@@ -2665,6 +2671,7 @@ function blackpawnclick({ piece }) {
                 });
             });
         });
+        highlight(piece);
     }
 }
 
