@@ -14,8 +14,6 @@ var blackrightrookmove = null;
 
 var checkhighlight = true;
 
-
-
 var opponentcheck = true;
 
 let checkwhiteorblack = 1;
@@ -28,6 +26,31 @@ var blackkingpos = "e8";
 
 var whitekingpos = "e1";
 
+var checkredhighlightaccept = true;
+
+
+function mno(element, piece) {
+    checkredhighlightaccept = true;
+    var chirag = document.getElementById(element).innerHTML;
+    const flatarr = globalstate.flat();
+    var bhutni = null;
+    flatarr.forEach(el => {
+        if (el.id === element) {
+            bhutni = el.piece;
+        }
+    });
+    console.log(bhutni, chirag);
+    checkifmovecheck(piece, element);
+
+    document.getElementById(element).innerHTML = chirag;
+    flatarr.forEach(el => {
+        if (el.id === element) {
+            el.piece = bhutni;
+        }
+    });
+    if (checkhighlight == false) checkredhighlightaccept = false;
+}
+
 function xyz(piece) {
     opponentcheck = true;
     const name = piece.piece_name;
@@ -35,7 +58,7 @@ function xyz(piece) {
         const current_pos = piece.current_position;
         const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) + 1}`;
         if (blackkingpos === col1) {
-            return false;
+            opponentcheck = false;
         }
         else {
             const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) + 1}`;
@@ -49,7 +72,6 @@ function xyz(piece) {
         const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) - 1}`;
         if (whitekingpos === col1) {
             opponentcheck = false;
-
         }
         else {
             const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) - 1}`;
@@ -508,11 +530,7 @@ function xyz(piece) {
 function checkifmovecheck(piece, id) {
     checkhighlight = true;
     var previousstate = piece.current_position;
-
     movepawn(piece, id);
-
-
-
     var chirag = piece;
     chirag.current_position = id;
     const flatarr = globalstate.flat();
@@ -569,7 +587,7 @@ function whiteking({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position,0);
+        movepawn(highlight_state, piece.current_position, 0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -577,6 +595,7 @@ function whiteking({ piece }) {
         return;
     }
     cleardot();
+    removered();
 
     if (highlight_state) {
         clearboard(highlight_state);
@@ -655,8 +674,16 @@ function whiteking({ piece }) {
 
     capture_square.forEach(element => {
         if (checkpiece(element, "White")) {
-            highlight_captureid.push(element);
+            mno(element, piece);
+            if (checkredhighlightaccept === true) {
+                highlight_captureid.push(element);
+            }
+
         }
+    });
+
+    highlight_captureid.forEach(element => {
+        document.getElementById(element).classList.add("capturecolor");
     });
 
     dots(hightlight_squareid);
@@ -670,6 +697,7 @@ function whiteking({ piece }) {
             });
         });
     });
+    highlight(piece);
 
 }
 
@@ -678,7 +706,7 @@ function blackking({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position,0);
+        movepawn(highlight_state, piece.current_position, 0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -686,6 +714,7 @@ function blackking({ piece }) {
         return;
     }
     cleardot();
+    removered();
 
     if (highlight_state) {
         clearboard(highlight_state);
@@ -724,36 +753,44 @@ function blackking({ piece }) {
             }
         }
     }
-    if (blackkingmove === null && blackleftrookmove === null) {
-        const idcheck = ["b8", "c8", "d8"];
-        var remind = 1;
-        idcheck.forEach(element => {
+    var x = Array.from(document.getElementById(piece.current_position).classList);
+    // console.log(x);
+    var index = x.indexOf("check");
 
-            if (document.getElementById(element).innerHTML) {
-                remind = 0;
+    if (index == -1) {
+        if (blackkingmove === null && blackleftrookmove === null) {
+            const idcheck = ["b8", "c8", "d8"];
+            var remind = 1;
+            idcheck.forEach(element => {
+
+                if (document.getElementById(element).innerHTML) {
+                    remind = 0;
+                }
+            });
+            if (remind == 1) {
+                checkifmovecheck(piece, "c8");
+                if (checkhighlight === true)
+                    hightlight_squareid.push("c8");
             }
-        });
-        if (remind == 1) {
-            checkifmovecheck(piece, "c8");
-            if (checkhighlight === true)
-                hightlight_squareid.push("c8");
+        }
+        if (blackkingmove === null && blackrightrookmove === null) {
+            const idcheck = ["f8", "g8"];
+            var remind = 1;
+            idcheck.forEach(element => {
+
+                if (document.getElementById(element).innerHTML) {
+                    remind = 0;
+                }
+            });
+            if (remind == 1) {
+                checkifmovecheck(piece, "g8");
+                if (checkhighlight === true)
+                    hightlight_squareid.push("g8");
+            }
         }
     }
-    if (blackkingmove === null && blackrightrookmove === null) {
-        const idcheck = ["f8", "g8"];
-        var remind = 1;
-        idcheck.forEach(element => {
 
-            if (document.getElementById(element).innerHTML) {
-                remind = 0;
-            }
-        });
-        if (remind == 1) {
-            checkifmovecheck(piece, "g8");
-            if (checkhighlight === true)
-                hightlight_squareid.push("g8");
-        }
-    }
+    console.log(index);
     cleardot();
     movestate = piece;
     highlight_state = piece;
@@ -762,8 +799,15 @@ function blackking({ piece }) {
 
     capture_square.forEach(element => {
         if (checkpiece(element, "Black")) {
-            highlight_captureid.push(element);
+            mno(element, piece);
+            if (checkredhighlightaccept === true) {
+                highlight_captureid.push(element);
+            }
         }
+    });
+
+    highlight_captureid.forEach(element => {
+        document.getElementById(element).classList.add("capturecolor");
     });
 
     dots(hightlight_squareid);
@@ -777,6 +821,8 @@ function blackking({ piece }) {
             });
         });
     });
+
+    highlight(piece);
 
 }
 
@@ -1280,7 +1326,7 @@ function blackknight({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position,0);
+        movepawn(highlight_state, piece.current_position, 0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -1288,6 +1334,7 @@ function blackknight({ piece }) {
         return;
     }
     cleardot();
+    removered();
 
     if (highlight_state) {
         clearboard(highlight_state);
@@ -1341,8 +1388,15 @@ function blackknight({ piece }) {
 
     capture_square.forEach(element => {
         if (checkpiece(element, "Black")) {
-            highlight_captureid.push(element);
+            mno(element, piece);
+            if (checkredhighlightaccept === true) {
+                highlight_captureid.push(element);
+            }
         }
+    });
+
+    highlight_captureid.forEach(element => {
+        document.getElementById(element).classList.add("capturecolor");
     });
 
     dots(hightlight_squareid);
@@ -1364,7 +1418,7 @@ function whiteknight({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position,0);
+        movepawn(highlight_state, piece.current_position, 0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -1372,6 +1426,7 @@ function whiteknight({ piece }) {
         return;
     }
     cleardot();
+    removered();
 
     if (highlight_state) {
         clearboard(highlight_state);
@@ -1426,8 +1481,15 @@ function whiteknight({ piece }) {
 
     capture_square.forEach(element => {
         if (checkpiece(element, "White")) {
-            highlight_captureid.push(element);
+            mno(element, piece);
+            if (checkredhighlightaccept === true) {
+                highlight_captureid.push(element);
+            }
         }
+    });
+
+    highlight_captureid.forEach(element => {
+        document.getElementById(element).classList.add("capturecolor");
     });
 
     dots(hightlight_squareid);
@@ -1441,6 +1503,7 @@ function whiteknight({ piece }) {
             });
         });
     });
+    highlight(piece);
 
 }
 
@@ -1449,7 +1512,7 @@ function whitequeen({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position,0);
+        movepawn(highlight_state, piece.current_position, 0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -1457,6 +1520,7 @@ function whitequeen({ piece }) {
         return;
     }
     cleardot();
+    removered();
 
     if (highlight_state) {
         clearboard(highlight_state);
@@ -1609,9 +1673,17 @@ function whitequeen({ piece }) {
 
     capture_square.forEach(element => {
         if (checkpiece(element, "White")) {
-            highlight_captureid.push(element);
+            mno(element, piece);
+            if (checkredhighlightaccept === true) {
+                highlight_captureid.push(element);
+            }
         }
     });
+
+    highlight_captureid.forEach(element => {
+        document.getElementById(element).classList.add("capturecolor");
+    });
+
 
     dots(hightlight_squareid);
 
@@ -1632,7 +1704,7 @@ function blackqueen({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position,0);
+        movepawn(highlight_state, piece.current_position, 0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -1640,6 +1712,7 @@ function blackqueen({ piece }) {
         return;
     }
     cleardot();
+    removered();
 
     if (highlight_state) {
         clearboard(highlight_state);
@@ -1791,8 +1864,15 @@ function blackqueen({ piece }) {
 
     capture_square.forEach(element => {
         if (checkpiece(element, "Black")) {
-            highlight_captureid.push(element);
+            mno(element, piece);
+            if (checkredhighlightaccept === true) {
+                highlight_captureid.push(element);
+            }
         }
+    });
+
+    highlight_captureid.forEach(element => {
+        document.getElementById(element).classList.add("capturecolor");
     });
 
     dots(hightlight_squareid);
@@ -1807,6 +1887,7 @@ function blackqueen({ piece }) {
         });
     });
 
+
 }
 
 function whitebishop({ piece }) {
@@ -1814,7 +1895,7 @@ function whitebishop({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position,0);
+        movepawn(highlight_state, piece.current_position, 0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -1822,6 +1903,7 @@ function whitebishop({ piece }) {
         return;
     }
     cleardot();
+    removered();
 
     if (highlight_state) {
         clearboard(highlight_state);
@@ -1917,8 +1999,15 @@ function whitebishop({ piece }) {
 
     capture_square.forEach(element => {
         if (checkpiece(element, "White")) {
-            highlight_captureid.push(element);
+            mno(element, piece);
+            if (checkredhighlightaccept === true) {
+                highlight_captureid.push(element);
+            }
         }
+    });
+
+    highlight_captureid.forEach(element => {
+        document.getElementById(element).classList.add("capturecolor");
     });
 
     dots(hightlight_squareid);
@@ -1939,7 +2028,7 @@ function blackbishop({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position,0);
+        movepawn(highlight_state, piece.current_position, 0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -1947,6 +2036,7 @@ function blackbishop({ piece }) {
         return;
     }
     cleardot();
+    removered();
 
     if (highlight_state) {
         clearboard(highlight_state);
@@ -2042,8 +2132,17 @@ function blackbishop({ piece }) {
 
     capture_square.forEach(element => {
         if (checkpiece(element, "Black")) {
-            highlight_captureid.push(element);
+            mno(element, piece);
+            console.log(checkredhighlightaccept === true);
+            if (checkredhighlightaccept === true) {
+                highlight_captureid.push(element);
+            }
         }
+    });
+    // console.log(highlight_captureid);
+
+    highlight_captureid.forEach(element => {
+        document.getElementById(element).classList.add("capturecolor");
     });
 
     dots(hightlight_squareid);
@@ -2064,7 +2163,7 @@ function blackrook({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position,0);
+        movepawn(highlight_state, piece.current_position, 0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -2072,6 +2171,7 @@ function blackrook({ piece }) {
         return;
     }
     cleardot();
+    removered();
 
     if (highlight_state) {
         clearboard(highlight_state);
@@ -2162,8 +2262,15 @@ function blackrook({ piece }) {
 
     capture_square.forEach(element => {
         if (checkpiece(element, "Black")) {
-            highlight_captureid.push(element);
+            mno(element, piece);
+            if (checkredhighlightaccept === true) {
+                highlight_captureid.push(element);
+            }
         }
+    });
+
+    highlight_captureid.forEach(element => {
+        document.getElementById(element).classList.add("capturecolor");
     });
 
     dots(hightlight_squareid);
@@ -2185,7 +2292,7 @@ function whiterook({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position,0);
+        movepawn(highlight_state, piece.current_position, 0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -2193,6 +2300,7 @@ function whiterook({ piece }) {
         return;
     }
     cleardot();
+    removered();
 
     if (highlight_state) {
         clearboard(highlight_state);
@@ -2283,8 +2391,15 @@ function whiterook({ piece }) {
 
     capture_square.forEach(element => {
         if (checkpiece(element, "White")) {
-            highlight_captureid.push(element);
+            mno(element, piece);
+            if (checkredhighlightaccept === true) {
+                highlight_captureid.push(element);
+            }
         }
+    });
+
+    highlight_captureid.forEach(element => {
+        document.getElementById(element).classList.add("capturecolor");
     });
 
     dots(hightlight_squareid);
@@ -2330,9 +2445,6 @@ function checkpiece(id, color) {
         const element = flatarr[index];
         if (element.id === id) {
             if (element.piece && element.piece.piece_name.includes(opponentcolor)) {
-                const el = document.getElementById(id);
-                el.classList.add("capturecolor");
-                element.capturehighlight = true;
                 return true;
             }
             break;
@@ -2356,9 +2468,10 @@ function temp({ piece }, id) {
 }
 
 function movepawn(piece, id, num) {
-    console.log(num);
+
 
     if (num === 0) {
+        clearcheck(greenhighlight);
         if (piece.piece_name === "White_king") {
             whitekingmove = true;
             {
@@ -2418,7 +2531,7 @@ function movepawn(piece, id, num) {
     if (piece.current_position === whitekingpos)
         whitekingpos = id;
     checkwhiteorblack = (checkwhiteorblack + 1) % 2;
-    clearcheck(greenhighlight);
+
     const flatdata = globalstate.flat();
     flatdata.forEach(el => {
         if (el.id === piece.current_position) {
@@ -2437,7 +2550,7 @@ function movepawn(piece, id, num) {
     piece.current_position = id;
     movestate = null;
     highlight_state = null;
-    check(piece);
+    if (num === 0) check(piece);
 }
 
 function dots(arr) {
@@ -2472,7 +2585,7 @@ function whitepawnclick({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position,0);
+        movepawn(highlight_state, piece.current_position, 0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -2482,12 +2595,20 @@ function whitepawnclick({ piece }) {
     cleardot();
     removered();
 
-    if (highlight_state) {
-        clearboard(highlight_state);
-    }
+
     if (piecewhiteblack == 0) {
         highlight_state = null;
         return;
+    }
+    if (piece == highlight_state) {
+        cleardot();
+        clearboard(piece);
+        removered();
+        highlight_state = null;
+        return;
+    }
+    if (highlight_state) {
+        clearboard(highlight_state);
     }
 
     const current_pos = piece.current_position;
@@ -2500,15 +2621,9 @@ function whitepawnclick({ piece }) {
             highlight_captureid.push(element);
         }
     });
-
-    if (piece == highlight_state) {
-        cleardot();
-        clearboard(piece);
-        removered();
-        highlight_state = null;
-        return;
-    }
-
+    highlight_captureid.forEach(element => {
+        document.getElementById(element).classList.add("capturecolor");
+    });
     highlight(piece);
 
     if (current_pos[1] == 2) {
@@ -2554,7 +2669,6 @@ function whitepawnclick({ piece }) {
             checkifmovecheck(piece, x);
             if (checkhighlight === true)
                 hightlight_squareid.push(x);
-
         }
         dots(hightlight_squareid);
         movestate = piece;
@@ -2575,7 +2689,7 @@ function blackpawnclick({ piece }) {
     if (isred.classList.contains("capturecolor")) {
         removered();
         cleardot();
-        movepawn(highlight_state, piece.current_position,0);
+        movepawn(highlight_state, piece.current_position, 0);
         if (highlight_state) {
             clearboard(highlight_state);
         }
@@ -2584,6 +2698,14 @@ function blackpawnclick({ piece }) {
     }
     cleardot();
     removered();
+
+    if (piece == highlight_state) {
+        cleardot();
+        removered();
+        clearboard(piece);
+        highlight_state = null;
+        return;
+    }
 
     if (highlight_state) {
         clearboard(highlight_state);
@@ -2600,17 +2722,18 @@ function blackpawnclick({ piece }) {
     let highlight_captureid = [];
     captureids.forEach(element => {
         if (checkpiece(element, "Black")) {
+            console.log(element);
             highlight_captureid.push(element);
         }
     });
 
-    if (piece == highlight_state) {
-        cleardot();
-        removered();
-        clearboard(piece);
-        highlight_state = null;
-        return;
-    }
+    highlight_captureid.forEach(element => {
+        console.log(element);
+        document.getElementById(element).classList.add("capturecolor");
+    });
+    // console.log(highlight_captureid);
+
+
 
     highlight(piece);
 
@@ -2675,9 +2798,12 @@ function blackpawnclick({ piece }) {
     }
 }
 
+
 function agrawal() {
     document.getElementById("root").addEventListener("click", function (event) {
+
         if (event.target.localName === "img") {
+
             const clickedid = event.target.parentNode.id;
             const flatarr = globalstate.flat();
             const square = (flatarr.find(el => el.id === clickedid));
@@ -2701,11 +2827,12 @@ function agrawal() {
                 whiteknight(square);
             }
 
-            if (square.piece.piece_name === "Black_queen") {
-                blackqueen(square);
-            }
+
             else if (square.piece.piece_name === "Black_rook") {
                 blackrook(square);
+            }
+            else if (square.piece.piece_name === "Black_queen") {
+                blackqueen(square);
             }
             else if (square.piece.piece_name === "Black_knight") {
                 blackknight(square);
@@ -2719,10 +2846,6 @@ function agrawal() {
             else if (square.piece.piece_name === "Black_king") {
                 blackking(square);
             }
-
-
-
-
         }
         else {
             removered()
