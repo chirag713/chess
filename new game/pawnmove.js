@@ -511,46 +511,46 @@ function checkifmovecheck(piece, id) {
 
     movepawn(piece, id);
 
-    
+
 
     var chirag = piece;
     chirag.current_position = id;
     const flatarr = globalstate.flat();
-    if(piece.piece_name.includes("Black")){
+    if (piece.piece_name.includes("Black")) {
         flatarr.forEach(el => {
             if (el.piece) {
                 if (el.piece.piece_name.includes("White")) {
-    
+
                     if (checkhighlight === true) {
                         xyz(el.piece);
                         if (opponentcheck === false) {
                             movepawn(chirag, previousstate);
                             movestate = piece;
-                            highlight_state=piece;
+                            highlight_state = piece;
                             checkhighlight = false;
                         }
                     }
                 }
-                
+
             }
         });
     }
-    else{
+    else {
         flatarr.forEach(el => {
             if (el.piece) {
                 if (el.piece.piece_name.includes("Black")) {
-    
+
                     if (checkhighlight === true) {
                         xyz(el.piece);
                         if (opponentcheck === false) {
                             movepawn(chirag, previousstate);
                             movestate = piece;
-                            highlight_state=piece;
+                            highlight_state = piece;
                             checkhighlight = false;
                         }
                     }
                 }
-                
+
             }
         });
 
@@ -558,7 +558,7 @@ function checkifmovecheck(piece, id) {
 
     if (checkhighlight == true) {
         movepawn(chirag, previousstate);
-        highlight_state=piece;
+        highlight_state = piece;
         movestate = piece;
     }
 }
@@ -625,7 +625,9 @@ function whiteking({ piece }) {
             }
         });
         if (remind == 1) {
-            hightlight_squareid.push("c1");
+            checkifmovecheck(piece, "c1");
+            if (checkhighlight === true)
+                hightlight_squareid.push("c1");
         }
     }
     if (whitekingmove === null && whiterightrookmove === null) {
@@ -638,9 +640,9 @@ function whiteking({ piece }) {
             }
         });
         if (remind == 1) {
-            checkifmovecheck(piece, mn);
+            checkifmovecheck(piece, "g1");
             if (checkhighlight === true)
-                hightlight_squareid.push(mn);
+                hightlight_squareid.push("g1");
         }
     }
 
@@ -732,9 +734,9 @@ function blackking({ piece }) {
             }
         });
         if (remind == 1) {
-            checkifmovecheck(piece, mn);
+            checkifmovecheck(piece, "c8");
             if (checkhighlight === true)
-                hightlight_squareid.push(mn);
+                hightlight_squareid.push("c8");
         }
     }
     if (blackkingmove === null && blackrightrookmove === null) {
@@ -747,7 +749,9 @@ function blackking({ piece }) {
             }
         });
         if (remind == 1) {
-            hightlight_squareid.push("g8");
+            checkifmovecheck(piece, "g8");
+            if (checkhighlight === true)
+                hightlight_squareid.push("g8");
         }
     }
     cleardot();
@@ -1322,8 +1326,8 @@ function blackknight({ piece }) {
             }
             else {
                 checkifmovecheck(piece, mn);
-            if (checkhighlight === true)
-                hightlight_squareid.push(mn);
+                if (checkhighlight === true)
+                    hightlight_squareid.push(mn);
             }
         }
 
@@ -1407,8 +1411,8 @@ function whiteknight({ piece }) {
             }
             else {
                 checkifmovecheck(piece, mn);
-            if (checkhighlight === true)
-                hightlight_squareid.push(mn);
+                if (checkhighlight === true)
+                    hightlight_squareid.push(mn);
             }
         }
 
@@ -2351,56 +2355,59 @@ function temp({ piece }, id) {
     movepawn(piece, id);
 }
 
-function movepawn(piece, id) {
+function movepawn(piece, id, num) {
+    console.log(num);
 
-    if (piece.piece_name === "White_king") {
-        whitekingmove = true;
-        {
-            if (id == "c1") {
-                const flatarr = globalstate.flat();
-                const square = (flatarr.find(el => el.id === "a1"));
-                temp(square, "d1");
-                piecewhiteblack = (piecewhiteblack + 1) % 2;
-            }
-            else if (id == "g1") {
-                const flatarr = globalstate.flat();
-                const square = (flatarr.find(el => el.id === "h1"));
-                temp(square, "f1");
-                piecewhiteblack = (piecewhiteblack + 1) % 2;
-            }
-        }
-    }
-    else if (piece.piece_name === "Black_king") {
-        blackkingmove = true;
-        {
-            if (id == "c8") {
-                const flatarr = globalstate.flat();
-                const square = (flatarr.find(el => el.id === "a8"));
-                temp(square, "d8");
-                piecewhiteblack = (piecewhiteblack + 1) % 2;
-            }
-            else if (id == "g8") {
-                const flatarr = globalstate.flat();
-                const square = (flatarr.find(el => el.id === "h8"));
-                temp(square, "f8");
-                piecewhiteblack = (piecewhiteblack + 1) % 2;
+    if (num === 0) {
+        if (piece.piece_name === "White_king") {
+            whitekingmove = true;
+            {
+                if (id == "c1") {
+                    const flatarr = globalstate.flat();
+                    const square = (flatarr.find(el => el.id === "a1"));
+                    temp(square, "d1");
+                    piecewhiteblack = (piecewhiteblack + 1) % 2;
+                }
+                else if (id == "g1") {
+                    const flatarr = globalstate.flat();
+                    const square = (flatarr.find(el => el.id === "h1"));
+                    temp(square, "f1");
+                    piecewhiteblack = (piecewhiteblack + 1) % 2;
+                }
             }
         }
-    }
-    else if (piece.piece_name == "White_rook") {
-        if (piece.current_position === "a1") {
-            whiteleftrookmove = true;
+        else if (piece.piece_name === "Black_king") {
+            blackkingmove = true;
+            {
+                if (id == "c8") {
+                    const flatarr = globalstate.flat();
+                    const square = (flatarr.find(el => el.id === "a8"));
+                    temp(square, "d8");
+                    piecewhiteblack = (piecewhiteblack + 1) % 2;
+                }
+                else if (id == "g8") {
+                    const flatarr = globalstate.flat();
+                    const square = (flatarr.find(el => el.id === "h8"));
+                    temp(square, "f8");
+                    piecewhiteblack = (piecewhiteblack + 1) % 2;
+                }
+            }
         }
-        else if (piece.current_position === "h1") {
-            whiterightrookmove = true;
+        else if (piece.piece_name == "White_rook") {
+            if (piece.current_position === "a1") {
+                whiteleftrookmove = true;
+            }
+            else if (piece.current_position === "h1") {
+                whiterightrookmove = true;
+            }
         }
-    }
-    else if (piece.piece_name == "Black_rook") {
-        if (piece.current_position === "a8") {
-            blackleftrookmove = true;
-        }
-        else if (piece.current_position === "h8") {
-            blackrightrookmove = true;
+        else if (piece.piece_name == "Black_rook") {
+            if (piece.current_position === "a8") {
+                blackleftrookmove = true;
+            }
+            else if (piece.current_position === "h8") {
+                blackrightrookmove = true;
+            }
         }
     }
 
@@ -2512,15 +2519,15 @@ function whitepawnclick({ piece }) {
         if (document.getElementById(x).innerHTML) {
         }
         else {
-            checkifmovecheck(piece,x);
+            checkifmovecheck(piece, x);
             if (checkhighlight === true)
                 hightlight_squareid.push(x);
             if (document.getElementById(y).innerHTML) {
             }
             else {
-                checkifmovecheck(piece,y);
-            if (checkhighlight === true)
-                hightlight_squareid.push(y);
+                checkifmovecheck(piece, y);
+                if (checkhighlight === true)
+                    hightlight_squareid.push(y);
             }
         }
         dots(hightlight_squareid);
@@ -2542,7 +2549,7 @@ function whitepawnclick({ piece }) {
         if (document.getElementById(x).innerHTML) {
         }
         else {
-            checkifmovecheck(piece,x);
+            checkifmovecheck(piece, x);
             if (checkhighlight === true)
                 hightlight_squareid.push(x);
 
@@ -2610,15 +2617,15 @@ function blackpawnclick({ piece }) {
         if (document.getElementById(x).innerHTML) {
         }
         else {
-            checkifmovecheck(piece,x);
+            checkifmovecheck(piece, x);
             if (checkhighlight === true)
                 hightlight_squareid.push(x);
             if (document.getElementById(y).innerHTML) {
             }
             else {
-                checkifmovecheck(piece,y);
-            if (checkhighlight === true)
-                hightlight_squareid.push(y);
+                checkifmovecheck(piece, y);
+                if (checkhighlight === true)
+                    hightlight_squareid.push(y);
             }
         }
         dots(hightlight_squareid);
@@ -2642,7 +2649,7 @@ function blackpawnclick({ piece }) {
         if (document.getElementById(x).innerHTML) {
         }
         else {
-            checkifmovecheck(piece,x);
+            checkifmovecheck(piece, x);
             if (checkhighlight === true)
                 hightlight_squareid.push(x);
         }
@@ -2716,11 +2723,11 @@ function agrawal() {
             if (childelementsofclickedel.length == 1 || event.target.localName == "span") {
                 if (event.target.localName == "span") {
                     const id = event.target.parentNode.id;
-                    movepawn(movestate, id);
+                    movepawn(movestate, id, 0);
                 }
                 else {
                     const id = event.target.id;
-                    movepawn(movestate, id);
+                    movepawn(movestate, id, 0);
                 }
             }
             else {
