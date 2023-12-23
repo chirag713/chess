@@ -39,7 +39,6 @@ function mno(element, piece) {
             bhutni = el.piece;
         }
     });
-    console.log(bhutni, chirag);
     checkifmovecheck(piece, element);
 
     document.getElementById(element).innerHTML = chirag;
@@ -634,37 +633,50 @@ function whiteking({ piece }) {
             }
         }
     }
-    if (whitekingmove === null && whiteleftrookmove === null) {
-        const idcheck = ["b1", "c1", "d1"];
-        var remind = 1;
-        idcheck.forEach(element => {
 
-            if (document.getElementById(element).innerHTML) {
-                remind = 0;
+    var x = Array.from(document.getElementById(piece.current_position).classList);
+    var index = x.indexOf("check");
+
+    if (index === -1) {
+        if (whitekingmove === null && whiteleftrookmove === null) {
+            const idcheck = ["b1", "c1", "d1"];
+            var remind = 1;
+            idcheck.forEach(element => {
+                if (document.getElementById(element).innerHTML) {
+                    remind = 0;
+                }
+            });
+            if (remind == 1) {
+                var index = hightlight_squareid.indexOf("d1");
+                if (index != -1) {
+                    checkifmovecheck(piece, "c1");
+                    if (checkhighlight === true)
+                        hightlight_squareid.push("c1");
+                }
+
             }
-        });
-        if (remind == 1) {
-            checkifmovecheck(piece, "c1");
-            if (checkhighlight === true)
-                hightlight_squareid.push("c1");
         }
-    }
-    if (whitekingmove === null && whiterightrookmove === null) {
-        const idcheck = ["f1", "g1"];
-        var remind = 1;
-        idcheck.forEach(element => {
+        if (whitekingmove === null && whiterightrookmove === null) {
+            const idcheck = ["f1", "g1"];
+            var remind = 1;
+            idcheck.forEach(element => {
 
-            if (document.getElementById(element).innerHTML) {
-                remind = 0;
+                if (document.getElementById(element).innerHTML) {
+                    remind = 0;
+                }
+            });
+            if (remind == 1) {
+                var index = hightlight_squareid.indexOf("f1");
+                if (index != -1) {
+                    checkifmovecheck(piece, "g1");
+                    if (checkhighlight === true)
+                        hightlight_squareid.push("g1");
+                }
+
             }
-        });
-        if (remind == 1) {
-            checkifmovecheck(piece, "g1");
-            if (checkhighlight === true)
-                hightlight_squareid.push("g1");
         }
-    }
 
+    }
 
     cleardot();
     movestate = piece;
@@ -754,9 +766,7 @@ function blackking({ piece }) {
         }
     }
     var x = Array.from(document.getElementById(piece.current_position).classList);
-    // console.log(x);
     var index = x.indexOf("check");
-
     if (index == -1) {
         if (blackkingmove === null && blackleftrookmove === null) {
             const idcheck = ["b8", "c8", "d8"];
@@ -768,9 +778,12 @@ function blackking({ piece }) {
                 }
             });
             if (remind == 1) {
-                checkifmovecheck(piece, "c8");
-                if (checkhighlight === true)
-                    hightlight_squareid.push("c8");
+                var index = hightlight_squareid.indexOf("d8");
+                if (index != -1) {
+                    checkifmovecheck(piece, "c8");
+                    if (checkhighlight === true)
+                        hightlight_squareid.push("c8");
+                }
             }
         }
         if (blackkingmove === null && blackrightrookmove === null) {
@@ -783,14 +796,16 @@ function blackking({ piece }) {
                 }
             });
             if (remind == 1) {
-                checkifmovecheck(piece, "g8");
-                if (checkhighlight === true)
-                    hightlight_squareid.push("g8");
+                var index = hightlight_squareid.indexOf("f8");
+                if (index != -1) {
+                    checkifmovecheck(piece, "g8");
+                    if (checkhighlight === true)
+                        hightlight_squareid.push("g8");
+                }
             }
         }
     }
 
-    console.log(index);
     cleardot();
     movestate = piece;
     highlight_state = piece;
@@ -2133,13 +2148,11 @@ function blackbishop({ piece }) {
     capture_square.forEach(element => {
         if (checkpiece(element, "Black")) {
             mno(element, piece);
-            console.log(checkredhighlightaccept === true);
             if (checkredhighlightaccept === true) {
                 highlight_captureid.push(element);
             }
         }
     });
-    // console.log(highlight_captureid);
 
     highlight_captureid.forEach(element => {
         document.getElementById(element).classList.add("capturecolor");
@@ -2384,11 +2397,7 @@ function whiterook({ piece }) {
         }
     }
 
-
-
     const highlight_captureid = [];
-
-
     capture_square.forEach(element => {
         if (checkpiece(element, "White")) {
             mno(element, piece);
@@ -2413,7 +2422,7 @@ function whiterook({ piece }) {
             });
         });
     });
-
+    highlight(piece);
 }
 
 function clearboard(piece) {
@@ -2618,7 +2627,10 @@ function whitepawnclick({ piece }) {
     let highlight_captureid = [];
     captureids.forEach(element => {
         if (checkpiece(element, "White")) {
-            highlight_captureid.push(element);
+            mno(element, piece);
+            if (checkredhighlightaccept === true) {
+                highlight_captureid.push(element);
+            }
         }
     });
     highlight_captureid.forEach(element => {
@@ -2722,18 +2734,16 @@ function blackpawnclick({ piece }) {
     let highlight_captureid = [];
     captureids.forEach(element => {
         if (checkpiece(element, "Black")) {
-            console.log(element);
-            highlight_captureid.push(element);
+            mno(element, piece);
+            if (checkredhighlightaccept === true) {
+                highlight_captureid.push(element);
+            }
         }
     });
 
     highlight_captureid.forEach(element => {
-        console.log(element);
         document.getElementById(element).classList.add("capturecolor");
     });
-    // console.log(highlight_captureid);
-
-
 
     highlight(piece);
 
